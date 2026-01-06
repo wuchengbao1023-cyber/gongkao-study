@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>公考循环学习系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        /* 基础重置 */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif; 
+            line-height: 1.5;
+            color: #333;
+            background: #f5f7fa;
+            padding: 15px;
+            min-height: 100vh;
+        }
+        
+        /* 容器 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* 顶部状态栏 */
+        .status-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .status-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        .status-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a237e;
+        }
+        
+        /* 主内容区域 - 响应式布局 */
+        .main-content {
+            display: block;
+        }
+        
+        @media (min-width: 768px) {
+            .main-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 20px;
+            }
+        }
+        
+        /* 左侧：学习区 */
+        .learning-area {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* AI提醒 */
+        .ai-reminder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #667eea;
+            flex-shrink: 0;
+        }
+        
+        .ai-message {
+            flex: 1;
+            font-size: 15px;
+        }
+        
+        /* 进度条 */
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        /* 模块列表 */
+        .modules-list {
+            margin-top: 25px;
+        }
+        
+        .module-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .module-item.completed {
+            background: #f0f9f0;
+            border-color: #c8e6c9;
+        }
+        
+        .module-item.current {
+            background: #e3f2fd;
+            border-color: #90caf9;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(33, 150, 243, 0); }
+            50% { box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1); }
+        }
+        
+        .module-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 24px;
+            height: 24px;
+            background: #1a237e;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .module-content {
+            margin-left: 30px;
+        }
+        
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .module-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #1a237e;
+        }
+        
+        .module-status {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: #e0e0e0;
+            color: #666;
+        }
+        
+        .module-status.completed {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .module-status.current {
+            background: #2196f3;
+            color: white;
+        }
+        
+        .module-meta {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .module-stats {
+            font-size: 12px;
+            color: #666;
+            background: rgba(0,0,0,0.03);
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .module-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            min-width: 44px;
+            user-select: none;
+        }
+        
+        .btn:active {
+            transform: translateY(2px);
+        }
+        
+        .btn-complete {
+            background: #4caf50;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-edit {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .btn-reset {
+            background: #f44336;
+            color: white;
+        }
+        
+        .btn-manage {
+            background: #2196f3;
+            color: white;
+        }
+        
+        /* 右侧：统计区 */
+        .stats-area {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stats-card {
+            margin-bottom: 25px;
+        }
+        
+        .stats-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        .stats-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a237e;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a237e;
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* 模块排行 */
+        .rank-list {
+            list-style: none;
+        }
+        
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .rank-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rank-name {
+            font-size: 14px;
+            flex: 1;
+        }
+        
+        .rank-value {
+            font-weight: bold;
+            color: #1a237e;
+        }
+        
+        .rank-trend {
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        
+        .trend-up { color: #4caf50; }
+        .trend-down { color: #f44336; }
+        
+        /* 控制按钮组 */
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-buttons .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        /* 弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+        
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #2196f3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+        
+        /* 错误提示 */
+        .error-text {
+            color: #f44336;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        
+        /* 模块管理 */
+        .module-edit-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .module-edit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        /* 重置确认 */
+        .reset-confirm {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .reset-input {
+            margin: 20px 0;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        /* 底部信息 */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        /* 加载动画 */
+        .loader {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loader::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2196f3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部状态栏 -->
+        <div class="status-bar">
+            <div class="status-info">
+                <div class="status-item">
+                    <div class="status-label">当前轮次</div>
+                    <div class="status-value" id="currentRound">1</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">今日进度</div>
+                    <div class="status-value" id="todayProgress">0/8</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">总题数</div>
+                    <div class="status-value" id="totalQuestions">0</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">正确率</div>
+                    <div class="status-value" id="accuracyRate">0%</div>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-manage" onclick="showEditModal()">
+                    <span>⚙️</span>
+                    <span class="desktop-only">模块管理</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 左侧：学习区 -->
+            <div class="learning-area">
+                <!-- AI提醒 -->
+                <div class="ai-reminder">
+                    <div class="ai-icon">👨‍🏫</div>
+                    <div class="ai-message" id="aiMessage">欢迎使用！今天也要全力以赴！</div>
+                </div>
+                
+                <!-- 进度条 -->
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <div>今日进度</div>
+                        <div id="progressPercent">0%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- 模块列表 -->
+                <div class="modules-list" id="modulesList">
+                    <!-- 模块由JS动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 右侧：统计区 -->
+            <div class="stats-area">
+                <!-- 总体统计 -->
+                <div class="stats-card">
+                    <div class="stats-title">📊 总体统计</div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">总轮数</div>
+                            <div class="stat-value" id="statTotalRounds">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">总天数</div>
+                            <div class="stat-value" id="statTotalDays">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">连续学习</div>
+                            <div class="stat-value" id="statStreakDays">0</div>
+                            <div class="stat-label" id="streakStatus">天</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">总耗时</div>
+                            <div class="stat-value" id="statTotalTime">0</div>
+                            <div class="stat-label">小时</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 模块排行 -->
+                <div class="stats-card">
+                    <div class="stats-title">📈 模块排行</div>
+                    <ul class="rank-list" id="rankList">
+                        <!-- 排行由JS生成 -->
+                    </ul>
+                </div>
+                
+                <!-- 今日状态 -->
+                <div class="stats-card">
+                    <div class="stats-title">🎯 今日状态</div>
+                    <div id="dailyStatus" style="font-size: 14px; line-height: 1.6;">
+                        今日尚未开始学习
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 控制按钮 -->
+        <div class="control-buttons">
+            <button class="btn btn-reset" onclick="showResetModal()">
+                <span>🔄</span>
+                重置今日
+            </button>
+            <button class="btn btn-reset" onclick="showClearAllModal()" style="background: #9c27b0;">
+                <span>🗑️</span>
+                清空数据
+            </button>
+            <button class="btn btn-manage" onclick="exportData()">
+                <span>📤</span>
+                导出数据
+            </button>
+        </div>
+        
+        <div class="footer">
+            数据保存在本地浏览器中 · 刷新页面不会丢失
+        </div>
+    </div>
+    
+    <!-- 完成模块弹窗 -->
+    <div id="completeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin: 0;">✅ 完成模块</h3>
+            </div>
+            <div id="completeModuleInfo" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <!-- 模块信息 -->
+            </div>
+            <form id="completeForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label class="form-label">本次错题数：</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="range" id="wrongRange" min="0" max="20" value="0" style="flex: 1;">
+                        <input type="number" id="wrongInput" class="form-input" min="0" max="20" value="0" 
+                               style="width: 80px; text-align: center;" required>
+                        <span>/<span id="maxQuestions">20</span>题</span>
+                    </div>
+                    <div id="wrongHint" style="margin-top: 8px; font-size: 13px; color: #666;">
+                        全对！继续保持！
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">备注（可选）：</label>
+                    <textarea id="noteInput" class="form-input" rows="3" 
+                              placeholder="记录本次练习的问题或心得..."></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 25px;">
+                    <button type="button" class="btn" onclick="closeCompleteModal()" style="flex: 1; background: #e0e0e0;">
+                        取消
+                    </button>
+                    <button type="submit" class="btn btn-complete" onclick="submitComplete()" style="flex: 2;">
+                        ✅ 确认完成
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 编辑模块弹窗 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin: 0;">⚙️ 模块管理</h3>
+            </div>
+            
+            <div class="module-edit-list" id="moduleEditList">
+                <!-- 编辑列表由JS生成 -->
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <button class="btn btn-manage" onclick="showAddModuleModal()">
+                    <span>➕</span>
+                    添加新模块
+                </button>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-complete" onclick="saveModules()" style="flex: 1;">
+                    💾 保存设置
+                </button>
+                <button class="btn" onclick="closeEditModal()" style="flex: 1; background: #e0e0e0;">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加模块弹窗 -->
+    <div id="addModuleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin: 0;">➕ 添加新模块</h3>
+            </div>
+            <form id="addModuleForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label class="form-label">模块名称：</label>
+                    <input type="text" id="newModuleName" class="form-input" 
+                           placeholder="例如：申论写作训练" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">模块分类：</label>
+                    <select id="newModuleCategory" class="form-input">
+                        <option value="言语理解">言语理解</option>
+                        <option value="判断推理">判断推理</option>
+                        <option value="资料分析">资料分析</option>
+                        <option value="数量关系">数量关系</option>
+                        <option value="申论">申论</option>
+                        <option value="常识">常识</option>
+                        <option value="专项训练">专项训练</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label class="form-label">时间（分钟）：</label>
+                        <input type="number" id="newModuleTime" class="form-input" 
+                               min="5" max="180" value="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">题量：</label>
+                        <input type="number" id="newModuleQuestions" class="form-input" 
+                               min="1" max="100" value="20" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">输出任务描述：</label>
+                    <textarea id="newModuleDesc" class="form-input" rows="3" 
+                              placeholder="例如：每题总结解题思路"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="btn" onclick="closeAddModuleModal()" 
+                            style="flex: 1; background: #e0e0e0;">
+                        取消
+                    </button>
+                    <button type="submit" class="btn btn-complete" onclick="addModule()" style="flex: 1;">
+                        添加
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 重置确认弹窗 -->
+    <div id="resetModal" class="modal">
+        <div class="modal-content">
+            <div class="reset-confirm">
+                <h3 style="margin-bottom: 15px;">🔄 重置今日进度</h3>
+                <p style="margin-bottom: 20px; color: #666;">
+                    这将清空今日所有模块的完成状态，但不会删除历史数据。
+                </p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" onclick="closeResetModal()" style="flex: 1; background: #e0e0e0;">
+                        取消
+                    </button>
+                    <button class="btn btn-reset" onclick="resetToday()" style="flex: 1;">
+                        确认重置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 清空数据弹窗 -->
+    <div id="clearAllModal" class="modal">
+        <div class="modal-content">
+            <div class="reset-confirm">
+                <h3 style="margin-bottom: 15px; color: #f44336;">⚠️ 清空所有数据</h3>
+                <p style="margin-bottom: 15px; color: #666;">
+                    这将删除所有学习记录，包括：
+                </p>
+                <ul style="text-align: left; margin-bottom: 20px; padding-left: 20px; color: #666;">
+                    <li>所有模块的历史数据</li>
+                    <li>总体统计信息</li>
+                    <li>连续学习记录</li>
+                    <li>自定义的模块设置</li>
+                </ul>
+                <p style="margin-bottom: 20px; color: #f44336; font-weight: bold;">
+                    此操作不可恢复！请谨慎操作。
+                </p>
+                <div class="form-group">
+                    <label class="form-label">请输入"RESET"确认：</label>
+                    <input type="text" id="resetConfirmInput" class="reset-input" 
+                           placeholder="RESET" oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" onclick="closeClearAllModal()" 
+                            style="flex: 1; background: #e0e0e0;">
+                        取消
+                    </button>
+                    <button class="btn btn-reset" onclick="clearAllData()" 
+                            style="flex: 1;" disabled id="clearAllBtn">
+                        🗑️ 清空数据
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 学习数据
+        const studyData = {
+            // 系统状态
+            currentDate: '',
+            currentRound: 1,
+            currentModuleIndex: 0,
+            todayCompleted: 0,
+            totalRounds: 0,
+            
+            // 总体统计
+            overall: {
+                totalQuestions: 0,
+                totalCorrect: 0,
+                streakDays: 0,
+                totalDays: 0,
+                lastStudyDate: '',
+                totalTime: 0 // 分钟
+            },
+            
+            // 模块定义（默认）
+            modules: [
+                { 
+                    id: 1, 
+                    name: "言语片段阅读", 
+                    category: "言语理解",
+                    time: 30, 
+                    questions: 20, 
+                    desc: "每题≤10字写核心论点",
+                    order: 1 
+                },
+                { 
+                    id: 2, 
+                    name: "逻辑判断", 
+                    category: "判断推理",
+                    time: 35, 
+                    questions: 20, 
+                    desc: "写论证类型+逻辑链",
+                    order: 2 
+                },
+                { 
+                    id: 3, 
+                    name: "资料分析", 
+                    category: "资料分析",
+                    time: 35, 
+                    questions: 20, 
+                    desc: "口述最难计算思路",
+                    order: 3 
+                },
+                { 
+                    id: 4, 
+                    name: "言语填空", 
+                    category: "言语理解",
+                    time: 30, 
+                    questions: 20, 
+                    desc: "记录犹豫选项并辨析",
+                    order: 4 
+                },
+                { 
+                    id: 5, 
+                    name: "图形推理", 
+                    category: "判断推理",
+                    time: 25, 
+                    questions: 20, 
+                    desc: "注错/慢题'死在何步'",
+                    order: 5 
+                },
+                { 
+                    id: 6, 
+                    name: "定义判断", 
+                    category: "判断推理",
+                    time: 25, 
+                    questions: 20, 
+                    desc: "先自话重述定义",
+                    order: 6 
+                },
+                { 
+                    id: 7, 
+                    name: "类比推理", 
+                    category: "判断推理",
+                    time: 20, 
+                    questions: 20, 
+                    desc: "错题反向构造例子",
+                    order: 7 
+                },
+                { 
+                    id: 8, 
+                    name: "终极任务", 
+                    category: "综合训练",
+                    time: 60, 
+                    questions: 1, 
+                    desc: "申论/错杀/体能三选一",
+                    order: 8 
+                }
+            ],
+            
+            // 模块统计数据
+            moduleStats: {},
+            
+            // 每日记录
+            daily: {
+                date: '',
+                completed: [], // 已完成的模块ID
+                startTime: 0,
+                totalTime: 0
+            },
+            
+            // 历史记录
+            history: []
+        };
+        
+        // AI消息库
+        const aiMessages = {
+            morning: [
+                "早上好！一日之计在于晨，开始今天的学习吧！",
+                "新的一天，新的开始！全力以赴！",
+                "早上头脑最清醒，适合攻克难题！"
+            ],
+            afternoon: [
+                "午休结束，开始下午的战斗吧！",
+                "下午容易犯困，打起精神来！",
+                "下午是巩固知识的好时机！"
+            ],
+            evening: [
+                "晚上是学习的黄金时间！",
+                "晚上安静，适合深度思考！",
+                "坚持到晚上就是胜利！"
+            ],
+            completed: [
+                "完成！继续保持这个状态！",
+                "做得好！离目标又近了一步！",
+                "不错！记得总结错题！"
+            ],
+            perfect: [
+                "全对！太强了！天才水平！",
+                "完美！继续保持！",
+                "100%正确率！你就是最棒的！"
+            ],
+            warning: [
+                "正确率偏低，需要加强复习！",
+                "错题有点多，要重点分析！",
+                "注意！这个模块需要加强！"
+            ],
+            progress: [
+                "已完成一半任务！继续加油！",
+                "进度不错，保持这个节奏！",
+                "今天状态很好，继续推进！"
+            ],
+            lazy: [
+                "检测到长时间无操作，快回来学习！",
+                "别分心，集中注意力！",
+                "该继续学习了！"
+            ]
+        };
+        
+        // 初始化
+        function init() {
+            loadData();
+            checkNewDay();
+            updateDisplay();
+            setupEventListeners();
+            updateAIMessage();
+        }
+        
+        function loadData() {
+            const saved = localStorage.getItem('studyData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    
+                    // 合并数据，保留新版本可能新增的字段
+                    Object.keys(data).forEach(key => {
+                        if (studyData[key] !== undefined) {
+                            if (typeof studyData[key] === 'object' && studyData[key] !== null) {
+                                Object.assign(studyData[key], data[key]);
+                            } else {
+                                studyData[key] = data[key];
+                            }
+                        }
+                    });
+                    
+                    // 初始化moduleStats
+                    studyData.modules.forEach(module => {
+                        if (!studyData.moduleStats[module.id]) {
+                            studyData.moduleStats[module.id] = {
+                                attempts: 0,
+                                totalQuestions: 0,
+                                totalCorrect: 0,
+                                bestAccuracy: 0,
+                                lastAccuracy: 0,
+                                history: []
+                            };
+                        }
+                    });
+                    
+                    console.log('数据加载成功');
+                } catch (e) {
+                    console.error('数据加载失败，使用默认数据', e);
+                    // 使用默认数据
+                }
+            }
+        }
+        
+        function saveData() {
+            try {
+                localStorage.setItem('studyData', JSON.stringify(studyData));
+            } catch (e) {
+                console.error('数据保存失败', e);
+                alert('数据保存失败，可能是存储空间不足');
+            }
+        }
+        
+        // 检查是否新的一天
+        function checkNewDay() {
+            const today = getTodayDate();
+            
+            if (studyData.currentDate !== today) {
+                console.log('新的一天开始');
+                
+                // 保存前一天的历史记录
+                if (studyData.daily.date && studyData.daily.completed.length > 0) {
+                    studyData.history.push({
+                        date: studyData.daily.date,
+                        completed: [...studyData.daily.completed],
+                        totalTime: studyData.daily.totalTime
+                    });
+                    
+                    // 只保留最近30天的历史
+                    if (studyData.history.length > 30) {
+                        studyData.history.shift();
+                    }
+                }
+                
+                // 检查连续学习
+                const yesterday = getYesterdayDate();
+                if (studyData.overall.lastStudyDate === yesterday) {
+                    studyData.overall.streakDays++;
+                    updateAIMessage('streak');
+                } else if (studyData.overall.lastStudyDate !== today) {
+                    studyData.overall.streakDays = 1;
+                    updateAIMessage('reset');
+                }
+                
+                // 更新日期相关数据
+                studyData.currentDate = today;
+                studyData.overall.lastStudyDate = today;
+                studyData.overall.totalDays++;
+                
+                // 重置今日数据
+                studyData.todayCompleted = 0;
+                studyData.currentModuleIndex = 0;
+                studyData.daily = {
+                    date: today,
+                    completed: [],
+                    startTime: Date.now(),
+                    totalTime: 0
+                };
+                
+                // 找到第一个未完成的模块
+                let firstIncomplete = 0;
+                for (let i = 0; i < studyData.modules.length; i++) {
+                    if (!studyData.daily.completed.includes(studyData.modules[i].id)) {
+                        firstIncomplete = i;
+                        break;
+                    }
+                }
+                studyData.currentModuleIndex = firstIncomplete;
+                
+                saveData();
+            }
+        }
+        
+        function getTodayDate() {
+            const now = new Date();
+            return `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+        }
+        
+        function getYesterdayDate() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return `${yesterday.getFullYear()}-${(yesterday.getMonth() + 1).toString().padStart(2, '0')}-${yesterday.getDate().toString().padStart(2, '0')}`;
+        }
+        
+        // 更新显示
+        function updateDisplay() {
+            // 更新顶部状态栏
+            document.getElementById('currentRound').textContent = studyData.currentRound;
+            document.getElementById('todayProgress').textContent = `${studyData.todayCompleted}/${studyData.modules.length}`;
+            document.getElementById('totalQuestions').textContent = studyData.overall.totalQuestions;
+            
+            // 计算正确率
+            const accuracy = studyData.overall.totalQuestions > 0 ? 
+                ((studyData.overall.totalCorrect / studyData.overall.totalQuestions) * 100).toFixed(1) : 0;
+            document.getElementById('accuracyRate').textContent = `${accuracy}%`;
+            
+            // 更新进度条
+            const progressPercent = (studyData.todayCompleted / studyData.modules.length) * 100;
+            document.getElementById('progressPercent').textContent = `${Math.round(progressPercent)}%`;
+            document.getElementById('progressBar').style.width = `${progressPercent}%`;
+            
+            // 更新右侧统计
+            document.getElementById('statTotalRounds').textContent = studyData.totalRounds;
+            document.getElementById('statTotalDays').textContent = studyData.overall.totalDays;
+            document.getElementById('statStreakDays').textContent = studyData.overall.streakDays;
+            
+            // 总耗时（小时）
+            const totalHours = (studyData.overall.totalTime / 60).toFixed(1);
+            document.getElementById('statTotalTime').textContent = totalHours;
+            
+            // 更新连续学习状态
+            const streakStatus = document.getElementById('streakStatus');
+            if (studyData.overall.streakDays >= 30) {
+                streakStatus.textContent = '天 🔥';
+            } else if (studyData.overall.streakDays >= 15) {
+                streakStatus.textContent = '天 🚀';
+            } else if (studyData.overall.streakDays >= 7) {
+                streakStatus.textContent = '天 💪';
+            } else {
+                streakStatus.textContent = '天';
+            }
+            
+            // 更新模块列表
+            updateModuleList();
+            
+            // 更新模块排行
+            updateRankList();
+            
+            // 更新今日状态
+            updateDailyStatus();
+            
+            // 保存数据
+            saveData();
+        }
+        
+        // 更新模块列表
+        function updateModuleList() {
+            const container = document.getElementById('modulesList');
+            container.innerHTML = '';
+            
+            studyData.modules.forEach((module, index) => {
+                const stats = studyData.moduleStats[module.id] || {
+                    attempts: 0,
+                    totalQuestions: 0,
+                    totalCorrect: 0
+                };
+                
+                const isCompleted = studyData.daily.completed.includes(module.id);
+                const isCurrent = index === studyData.currentModuleIndex && !isCompleted;
+                
+                // 计算历史正确率
+                const historyAccuracy = stats.attempts > 0 ? 
+                    ((stats.totalCorrect / stats.totalQuestions) * 100).toFixed(1) : 0;
+                
+                const moduleDiv = document.createElement('div');
+                moduleDiv.className = `module-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`;
+                
+                // 状态文本
+                let statusText = '等待中';
+                if (isCompleted) statusText = '已完成';
+                if (isCurrent) statusText = '当前';
+                
+                moduleDiv.innerHTML = `
+                    <div class="module-number">${index + 1}</div>
+                    <div class="module-content">
+                        <div class="module-header">
+                            <div class="module-title">${module.name}</div>
+                            <div class="module-status ${statusText}">${statusText}</div>
+                        </div>
+                        <div class="module-meta">
+                            ${module.questions}题 · ${module.time}分钟 · ${module.category}
+                        </div>
+                        ${stats.attempts > 0 ? 
+                            `<div class="module-stats">
+                                练习${stats.attempts}次 · 历史正确率：${historyAccuracy}%
+                            </div>` : 
+                            '<div class="module-stats">新模块</div>'
+                        }
+                        ${!isCompleted ? `
+                            <div class="module-actions">
+                                <button class="btn btn-complete" onclick="completeModule(${index})">
+                                    ✅ 完成
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(moduleDiv);
+            });
+        }
+        
+        // 更新模块排行
+        function updateRankList() {
+            const container = document.getElementById('rankList');
+            container.innerHTML = '';
+            
+            // 计算每个模块的数据
+            const moduleRanks = studyData.modules.map(module => {
+                const stats = studyData.moduleStats[module.id] || {
+                    attempts: 0,
+                    totalQuestions: 0,
+                    totalCorrect: 0
+                };
+                
+                const accuracy = stats.attempts > 0 ? 
+                    ((stats.totalCorrect / stats.totalQuestions) * 100) : 0;
+                
+                return {
+                    name: module.name,
+                    accuracy: accuracy,
+                    attempts: stats.attempts
+                };
+            }).filter(m => m.attempts > 0); // 只显示有数据的模块
+            
+            // 按正确率排序
+            moduleRanks.sort((a, b) => b.accuracy - a.accuracy);
+            
+            // 只显示前6个
+            const displayRanks = moduleRanks.slice(0, 6);
+            
+            displayRanks.forEach((module, index) => {
+                const li = document.createElement('li');
+                li.className = 'rank-item';
+                
+                // 趋势判断（简化版）
+                let trend = '';
+                if (module.accuracy >= 80) {
+                    trend = '<span class="trend-up">📈</span>';
+                } else if (module.accuracy < 60) {
+                    trend = '<span class="trend-down">⚠️</span>';
+                }
+                
+                li.innerHTML = `
+                    <div class="rank-name">${module.name}</div>
+                    <div>
+                        <span class="rank-value">${module.accuracy.toFixed(1)}%</span>
+                        <span class="rank-trend">${trend}</span>
+                    </div>
+                `;
+                container.appendChild(li);
+            });
+            
+            if (displayRanks.length === 0) {
+                container.innerHTML = '<li class="rank-item" style="color: #999; justify-content: center;">暂无数据</li>';
+            }
+        }
+        
+        // 更新今日状态
+        function updateDailyStatus() {
+            const container = document.getElementById('dailyStatus');
+            const progress = studyData.todayCompleted / studyData.modules.length;
+            const hour = new Date().getHours();
+            
+            let statusText = '';
+            
+            if (progress === 0) {
+                statusText = '今日尚未开始学习';
+                if (hour >= 10) statusText += ' ⏰';
+            } else if (progress < 0.5) {
+                statusText = `已完成${studyData.todayCompleted}个模块，进度偏慢`;
+                if (hour >= 15) statusText += ' 🚨';
+            } else if (progress < 1) {
+                statusText = `已完成${studyData.todayCompleted}个模块，进度正常`;
+                if (progress >= 0.75) statusText += ' 💪';
+            } else {
+                statusText = '🎉 今日任务全部完成！';
+            }
+            
+            // 添加时间建议
+            if (hour < 12 && progress < 0.3) {
+                statusText += '<br><small>建议：上午抓紧时间</small>';
+            } else if (hour >= 18 && progress < 1) {
+                statusText += '<br><small>建议：晚上是冲刺的好时机</small>';
+            }
+            
+            container.innerHTML = statusText;
+        }
+        
+        // 完成模块
+        function completeModule(index) {
+            if (index !== studyData.currentModuleIndex) {
+                alert('请按顺序完成模块！');
+                return;
+            }
+            
+            const module = studyData.modules[index];
+            
+            // 设置最大题量
+            document.getElementById('maxQuestions').textContent = module.questions;
+            document.getElementById('wrongRange').max = module.questions;
+            document.getElementById('wrongInput').max = module.questions;
+            
+            // 设置默认值
+            document.getElementById('wrongRange').value = 0;
+            document.getElementById('wrongInput').value = 0;
+            document.getElementById('noteInput').value = '';
+            updateWrongHint(0, module.questions);
+            
+            // 显示模块信息
+            document.getElementById('completeModuleInfo').innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 5px;">${module.name}</div>
+                <div style="font-size: 14px; color: #666;">
+                    ${module.questions}题 · ${module.time}分钟<br>
+                    <small>${module.desc}</small>
+                </div>
+            `;
+            
+            // 显示弹窗
+            document.getElementById('completeModal').style.display = 'flex';
+            document.getElementById('wrongInput').focus();
+        }
+        
+        // 更新错题提示
+        function updateWrongHint(wrongCount, totalQuestions) {
+            const hint = document.getElementById('wrongHint');
+            const accuracy = ((totalQuestions - wrongCount) / totalQuestions * 100).toFixed(1);
+            
+            let text = `正确率：${accuracy}% - `;
+            let color = '#666';
+            
+            if (wrongCount === 0) {
+                text += '全对！继续保持！';
+                color = '#4caf50';
+            } else if (wrongCount <= totalQuestions * 0.2) {
+                text += '优秀！错题很少！';
+                color = '#4caf50';
+            } else if (wrongCount <= totalQuestions * 0.4) {
+                text += '良好，可以更好！';
+                color = '#ff9800';
+            } else {
+                text += '需要加强练习！';
+                color = '#f44336';
+            }
+            
+            hint.textContent = text;
+            hint.style.color = color;
+        }
+        
+        // 提交完成
+        function submitComplete() {
+            const wrongCount = parseInt(document.getElementById('wrongInput').value);
+            const totalQuestions = parseInt(document.getElementById('maxQuestions').textContent);
+            const note = document.getElementById('noteInput').value.trim();
+            
+            if (isNaN(wrongCount) || wrongCount < 0 || wrongCount > totalQuestions) {
+                alert('请输入有效的错题数！');
+                return;
+            }
+            
+            const index = studyData.currentModuleIndex;
+            const module = studyData.modules[index];
+            
+            // 更新模块统计
+            const stats = studyData.moduleStats[module.id];
+            const correctCount = totalQuestions - wrongCount;
+            const accuracy = (correctCount / totalQuestions) * 100;
+            
+            stats.attempts++;
+            stats.totalQuestions += totalQuestions;
+            stats.totalCorrect += correctCount;
+            stats.lastAccuracy = stats.bestAccuracy;
+            stats.bestAccuracy = Math.max(stats.bestAccuracy, accuracy);
+            
+            // 记录历史
+            stats.history.push({
+                date: studyData.currentDate,
+                wrongCount: wrongCount,
+                accuracy: accuracy,
+                note: note
+            });
+            
+            // 更新总体数据
+            studyData.overall.totalQuestions += totalQuestions;
+            studyData.overall.totalCorrect += correctCount;
+            studyData.overall.totalTime += module.time; // 使用建议时间
+            
+            // 更新今日数据
+            studyData.todayCompleted++;
+            studyData.daily.completed.push(module.id);
+            studyData.daily.totalTime += module.time;
+            
+            // AI反馈
+            if (accuracy >= 90) {
+                updateAIMessage('perfect');
+            } else if (accuracy >= 70) {
+                updateAIMessage('completed');
+            } else {
+                updateAIMessage('warning');
+            }
+            
+            // 检查预警
+            if (accuracy < 60) {
+                showAlert(`${module.name}正确率仅${accuracy.toFixed(1)}%，需要重点复习！`, 'danger');
+            }
+            
+            // 检查是否完成一轮
+            if (studyData.todayCompleted >= studyData.modules.length) {
+                studyData.currentRound++;
+                studyData.totalRounds++;
+                studyData.todayCompleted = 0;
+                studyData.currentModuleIndex = 0;
+                studyData.daily.completed = [];
+                updateAIMessage('roundComplete');
+            } else {
+                // 找到下一个未完成的模块
+                let nextIndex = -1;
+                for (let i = 0; i < studyData.modules.length; i++) {
+                    if (!studyData.daily.completed.includes(studyData.modules[i].id)) {
+                        nextIndex = i;
+                        break;
+                    }
+                }
+                studyData.currentModuleIndex = nextIndex;
+            }
+            
+            closeCompleteModal();
+            updateDisplay();
+            
+            // 自动提示下一个模块
+            if (studyData.currentModuleIndex >= 0 && studyData.currentModuleIndex < studyData.modules.length) {
+                const nextModule = studyData.modules[studyData.currentModuleIndex];
+                setTimeout(() => {
+                    updateAIMessage('next', nextModule.name);
+                }, 500);
+            }
+        }
+        
+        // 显示编辑模块弹窗
+        function showEditModal() {
+            updateModuleEditList();
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        function updateModuleEditList() {
+            const container = document.getElementById('moduleEditList');
+            container.innerHTML = '';
+            
+            studyData.modules.forEach((module, index) => {
+                const div = document.createElement('div');
+                div.className = 'module-edit-item';
+                div.innerHTML = `
+                    <div>
+                        <div style="font-weight: bold;">${module.name}</div>
+                        <div style="font-size: 12px; color: #666;">
+                            ${module.category} · ${module.questions}题 · ${module.time}分钟
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 5px;">
+                        <button onclick="moveModule(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.5;"' : ''}>
+                            ⬆️
+                        </button>
+                        <button onclick="moveModule(${index}, 1)" ${index === studyData.modules.length-1 ? 'disabled style="opacity:0.5;"' : ''}>
+                            ⬇️
+                        </button>
+                        <button onclick="removeModule(${index})" style="color: #f44336;">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // 移动模块
+        function moveModule(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= studyData.modules.length) return;
+            
+            // 交换位置
+            [studyData.modules[index], studyData.modules[newIndex]] = 
+            [studyData.modules[newIndex], studyData.modules[index]];
+            
+            updateModuleEditList();
+        }
+        
+        // 删除模块
+        function removeModule(index) {
+            if (!confirm(`确定删除模块"${studyData.modules[index].name}"吗？`)) return;
+            
+            const moduleId = studyData.modules[index].id;
+            
+            // 删除模块统计数据
+            delete studyData.moduleStats[moduleId];
+            
+            // 删除模块
+            studyData.modules.splice(index, 1);
+            
+            // 如果删除的是当前模块，需要调整currentModuleIndex
+            if (index <= studyData.currentModuleIndex) {
+                studyData.currentModuleIndex = Math.max(0, studyData.currentModuleIndex - 1);
+            }
+            
+            updateModuleEditList();
+            updateDisplay();
+        }
+        
+        // 显示添加模块弹窗
+        function showAddModuleModal() {
+            document.getElementById('newModuleName').value = '';
+            document.getElementById('newModuleTime').value = 30;
+            document.getElementById('newModuleQuestions').value = 20;
+            document.getElementById('newModuleDesc').value = '';
+            
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('addModuleModal').style.display = 'flex';
+            document.getElementById('newModuleName').focus();
+        }
+        
+        // 添加模块
+        function addModule() {
+            const name = document.getElementById('newModuleName').value.trim();
+            const category = document.getElementById('newModuleCategory').value;
+            const time = parseInt(document.getElementById('newModuleTime').value);
+            const questions = parseInt(document.getElementById('newModuleQuestions').value);
+            const desc = document.getElementById('newModuleDesc').value.trim();
+            
+            if (!name) {
+                alert('请输入模块名称！');
+                return;
+            }
+            
+            if (isNaN(time) || time < 5) {
+                alert('请输入有效的时间（至少5分钟）！');
+                return;
+            }
+            
+            if (isNaN(questions) || questions < 1) {
+                alert('请输入有效的题量！');
+                return;
+            }
+            
+            const newModule = {
+                id: Date.now(), // 使用时间戳作为唯一ID
+                name: name,
+                category: category,
+                time: time,
+                questions: questions,
+                desc: desc || "请按要求完成练习",
+                order: studyData.modules.length + 1
+            };
+            
+            studyData.modules.push(newModule);
+            
+            // 初始化统计
+            studyData.moduleStats[newModule.id] = {
+                attempts: 0,
+                totalQuestions: 0,
+                totalCorrect: 0,
+                bestAccuracy: 0,
+                lastAccuracy: 0,
+                history: []
+            };
+            
+            closeAddModuleModal();
+            showEditModal(); // 返回编辑页面
+            
+            updateAIMessage('moduleAdded', name);
+        }
+        
+        // 保存模块设置
+        function saveModules() {
+            saveData();
+            closeEditModal();
+            updateDisplay();
+            
+            updateAIMessage('settingsSaved');
+        }
+        
+        // 显示重置弹窗
+        function showResetModal() {
+            document.getElementById('resetModal').style.display = 'flex';
+        }
+        
+        // 重置今日进度
+        function resetToday() {
+            if (!confirm('确定重置今日进度吗？今日完成的所有模块将被标记为未完成。')) return;
+            
+            studyData.todayCompleted = 0;
+            studyData.currentModuleIndex = 0;
+            studyData.daily.completed = [];
+            studyData.daily.totalTime = 0;
+            
+            closeResetModal();
+            updateDisplay();
+            
+            updateAIMessage('reset');
+        }
+        
+        // 显示清空数据弹窗
+        function showClearAllModal() {
+            document.getElementById('resetConfirmInput').value = '';
+            document.getElementById('clearAllBtn').disabled = true;
+            document.getElementById('clearAllModal').style.display = 'flex';
+        }
+        
+        // 清空所有数据
+        function clearAllData() {
+            if (!confirm('最后确认：这将清空所有数据，无法恢复！')) return;
+            
+            // 清空所有数据
+            studyData.currentDate = getTodayDate();
+            studyData.currentRound = 1;
+            studyData.currentModuleIndex = 0;
+            studyData.todayCompleted = 0;
+            studyData.totalRounds = 0;
+            
+            studyData.overall = {
+                totalQuestions: 0,
+                totalCorrect: 0,
+                streakDays: 1,
+                totalDays: 1,
+                lastStudyDate: getTodayDate(),
+                totalTime: 0
+            };
+            
+            studyData.moduleStats = {};
+            
+            studyData.daily = {
+                date: getTodayDate(),
+                completed: [],
+                startTime: Date.now(),
+                totalTime: 0
+            };
+            
+            studyData.history = [];
+            
+            // 重置为默认模块
+            studyData.modules = [
+                { id: 1, name: "言语片段阅读", category: "言语理解", time: 30, questions: 20, desc: "每题≤10字写核心论点", order: 1 },
+                { id: 2, name: "逻辑判断", category: "判断推理", time: 35, questions: 20, desc: "写论证类型+逻辑链", order: 2 },
+                { id: 3, name: "资料分析", category: "资料分析", time: 35, questions: 20, desc: "口述最难计算思路", order: 3 },
+                { id: 4, name: "言语填空", category: "言语理解", time: 30, questions: 20, desc: "记录犹豫选项并辨析", order: 4 },
+                { id: 5, name: "图形推理", category: "判断推理", time: 25, questions: 20, desc: "注错/慢题'死在何步'", order: 5 },
+                { id: 6, name: "定义判断", category: "判断推理", time: 25, questions: 20, desc: "先自话重述定义", order: 6 },
+                { id: 7, name: "类比推理", category: "判断推理", time: 20, questions: 20, desc: "错题反向构造例子", order: 7 },
+                { id: 8, name: "终极任务", category: "综合训练", time: 60, questions: 1, desc: "申论/错杀/体能三选一", order: 8 }
+            ];
+            
+            // 初始化默认模块的统计
+            studyData.modules.forEach(module => {
+                studyData.moduleStats[module.id] = {
+                    attempts: 0,
+                    totalQuestions: 0,
+                    totalCorrect: 0,
+                    bestAccuracy: 0,
+                    lastAccuracy: 0,
+                    history: []
+                };
+            });
+            
+            closeClearAllModal();
+            saveData();
+            updateDisplay();
+            
+            updateAIMessage('clearAll');
+        }
+        
+        // 导出数据
+        function exportData() {
+            const dataStr = JSON.stringify(studyData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `公考学习数据_${getTodayDate()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            
+            alert('数据已导出为JSON文件！');
+        }
+        
+        // 更新AI消息
+        function updateAIMessage(type, extra = '') {
+            const container = document.getElementById('aiMessage');
+            let message = '';
+            
+            const hour = new Date().getHours();
+            let timeOfDay = 'morning';
+            if (hour >= 12 && hour < 18) timeOfDay = 'afternoon';
+            if (hour >= 18) timeOfDay = 'evening';
+            
+            switch(type) {
+                case 'morning':
+                    message = aiMessages.morning[Math.floor(Math.random() * aiMessages.morning.length)];
+                    break;
+                case 'afternoon':
+                    message = aiMessages.afternoon[Math.floor(Math.random() * aiMessages.afternoon.length)];
+                    break;
+                case 'evening':
+                    message = aiMessages.evening[Math.floor(Math.random() * aiMessages.evening.length)];
+                    break;
+                case 'perfect':
+                    message = aiMessages.perfect[Math.floor(Math.random() * aiMessages.perfect.length)];
+                    break;
+                case 'completed':
+                    message = aiMessages.completed[Math.floor(Math.random() * aiMessages.completed.length)];
+                    break;
+                case 'warning':
+                    message = aiMessages.warning[Math.floor(Math.random() * aiMessages.warning.length)];
+                    break;
+                case 'progress':
+                    message = aiMessages.progress[Math.floor(Math.random() * aiMessages.progress.length)];
+                    break;
+                case 'lazy':
+                    message = aiMessages.lazy[Math.floor(Math.random() * aiMessages.lazy.length)];
+                    break;
+                case 'streak':
+                    message = `连续学习第${studyData.overall.streakDays}天！继续保持！`;
+                    break;
+                case 'reset':
+                    message = '新的一天，新的开始！';
+                    break;
+                case 'roundComplete':
+                    message = `🎉 恭喜完成第${studyData.currentRound-1}轮！开始第${studyData.currentRound}轮！`;
+                    break;
+                case 'next':
+                    message = `接下来是：${extra}，继续加油！`;
+                    break;
+                case 'moduleAdded':
+                    message = `已添加新模块：${extra}`;
+                    break;
+                case 'settingsSaved':
+                    message = '学习计划已更新！';
+                    break;
+                case 'clearAll':
+                    message = '数据已清空，重新开始！';
+                    break;
+                default:
+                    message = aiMessages[timeOfDay][Math.floor(Math.random() * aiMessages[timeOfDay].length)];
+            }
+            
+            container.textContent = message;
+        }
+        
+        // 显示警告
+        function showAlert(message, type = 'warning') {
+            // 这里可以添加视觉警告，暂用alert
+            if (type === 'danger') {
+                alert('⚠️ ' + message);
+            }
+        }
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 错题数滑块和输入框同步
+            const wrongRange = document.getElementById('wrongRange');
+            const wrongInput = document.getElementById('wrongInput');
+            
+            if (wrongRange && wrongInput) {
+                wrongRange.addEventListener('input', function() {
+                    wrongInput.value = this.value;
+                    const totalQuestions = parseInt(document.getElementById('maxQuestions').textContent);
+                    updateWrongHint(parseInt(this.value), totalQuestions);
+                });
+                
+                wrongInput.addEventListener('input', function() {
+                    wrongRange.value = this.value;
+                    const totalQuestions = parseInt(document.getElementById('maxQuestions').textContent);
+                    updateWrongHint(parseInt(this.value), totalQuestions);
+                });
+            }
+            
+            // 清空数据确认输入
+            const resetConfirmInput = document.getElementById('resetConfirmInput');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            
+            if (resetConfirmInput && clearAllBtn) {
+                resetConfirmInput.addEventListener('input', function() {
+                    clearAllBtn.disabled = this.value.toUpperCase() !== 'RESET';
+                });
+            }
+            
+            // 自动更新AI消息
+            setInterval(() => {
+                const hour = new Date().getHours();
+                let timeOfDay = 'morning';
+                if (hour >= 12 && hour < 18) timeOfDay = 'afternoon';
+                if (hour >= 18) timeOfDay = 'evening';
+                
+                updateAIMessage(timeOfDay);
+            }, 30 * 60 * 1000); // 每30分钟更新一次
+            
+            // 检查长时间无操作
+            let lastActivity = Date.now();
+            const activityEvents = ['click', 'touchstart', 'keydown', 'mousemove'];
+            
+            activityEvents.forEach(event => {
+                document.addEventListener(event, () => {
+                    lastActivity = Date.now();
+                });
+            });
+            
+            setInterval(() => {
+                if (Date.now() - lastActivity > 30 * 60 * 1000) { // 30分钟
+                    if (studyData.todayCompleted < studyData.modules.length) {
+                        updateAIMessage('lazy');
+                        lastActivity = Date.now(); // 重置，避免重复提醒
+                    }
+                }
+            }, 60 * 1000); // 每分钟检查一次
+        }
+        
+        // 关闭弹窗函数
+        function closeCompleteModal() {
+            document.getElementById('completeModal').style.display = 'none';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        function closeAddModuleModal() {
+            document.getElementById('addModuleModal').style.display = 'none';
+            showEditModal(); // 返回编辑页面
+        }
+        
+        function closeResetModal() {
+            document.getElementById('resetModal').style.display = 'none';
+        }
+        
+        function closeClearAllModal() {
+            document.getElementById('clearAllModal').style.display = 'none';
+        }
+        
+        // 页面加载
+        window.onload = init;
+    </script>
+</body>
+</html>
