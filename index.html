@@ -533,7 +533,7 @@
                     <div class="status-value" id="currentRound">1</div>
                 </div>
                 <div class="status-item">
-                    <div class="status-label">今日进度</div>
+                    <div class="status-label">本轮进度</div>
                     <div class="status-value" id="todayProgress">0/8</div>
                 </div>
                 <div class="status-item">
@@ -565,7 +565,7 @@
                 <!-- 进度条 -->
                 <div class="progress-container">
                     <div class="progress-header">
-                        <div>今日进度</div>
+                        <div>本轮进度</div>
                         <div id="progressPercent">0%</div>
                     </div>
                     <div class="progress-bar">
@@ -614,11 +614,11 @@
                     </ul>
                 </div>
                 
-                <!-- 今日状态 -->
+                <!-- 本轮状态 -->
                 <div class="stats-card">
-                    <div class="stats-title">🎯 今日状态</div>
+                    <div class="stats-title">🎯 本轮状态</div>
                     <div id="dailyStatus" style="font-size: 14px; line-height: 1.6;">
-                        今日尚未开始学习
+                        本轮尚未开始学习
                     </div>
                 </div>
             </div>
@@ -628,7 +628,7 @@
         <div class="control-buttons">
             <button class="btn btn-reset" onclick="showResetModal()">
                 <span>🔄</span>
-                重置今日
+                重置本轮
             </button>
             <button class="btn btn-reset" onclick="showClearAllModal()" style="background: #9c27b0;">
                 <span>🗑️</span>
@@ -771,9 +771,9 @@
     <div id="resetModal" class="modal">
         <div class="modal-content">
             <div class="reset-confirm">
-                <h3 style="margin-bottom: 15px;">🔄 重置今日进度</h3>
+                <h3 style="margin-bottom: 15px;">🔄 重置本轮进度</h3>
                 <p style="margin-bottom: 20px; color: #666;">
-                    这将清空今日所有模块的完成状态，但不会删除历史数据。
+                    这将清空本轮所有模块的完成状态，但不会删除历史数据。
                 </p>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn" onclick="closeResetModal()" style="flex: 1; background: #e0e0e0;">
@@ -1035,6 +1035,16 @@
             }
         }
         
+        // 查找第一个未完成模块的索引
+        function findFirstIncompleteModule() {
+            for (let i = 0; i < studyData.modules.length; i++) {
+                if (!studyData.daily.completed.includes(studyData.modules[i].id)) {
+                    return i; // 返回第一个未完成模块的索引
+                }
+            }
+            return 0; // 如果全部完成了（例如刚完成一轮），就返回0开始新一轮
+        }
+        
         // 检查是否新的一天
         function checkNewDay() {
             const today = getTodayDate();
@@ -1071,25 +1081,14 @@
                 studyData.overall.lastStudyDate = today;
                 studyData.overall.totalDays++;
                 
-                // 重置今日数据
-                studyData.todayCompleted = 0;
-                studyData.currentModuleIndex = 0;
-                studyData.daily = {
-                    date: today,
-                    completed: [],
-                    startTime: Date.now(),
-                    totalTime: 0
-                };
+                // ========== 核心修改1：新的一天不重置进度 ==========
+                studyData.daily.date = today;
+                studyData.daily.startTime = Date.now();
+                // 不再重置 todayCompleted, currentModuleIndex 和 daily.completed
+                // ==================================================
                 
-                // 找到第一个未完成的模块
-                let firstIncomplete = 0;
-                for (let i = 0; i < studyData.modules.length; i++) {
-                    if (!studyData.daily.completed.includes(studyData.modules[i].id)) {
-                        firstIncomplete = i;
-                        break;
-                    }
-                }
-                studyData.currentModuleIndex = firstIncomplete;
+                // 确保当前模块索引指向第一个未完成的模块
+                studyData.currentModuleIndex = findFirstIncompleteModule();
                 
                 saveData();
             }
@@ -1110,7 +1109,13 @@
         function updateDisplay() {
             // 更新顶部状态栏
             document.getElementById('currentRound').textContent = studyData.currentRound;
-            document.getElementById('todayProgress').textContent = `${studyData.todayCompleted}/${studyData.modules.length}`;
+            
+            // ========== 核心修改2：今日进度改为显示当前轮次进度 ==========
+            const totalModules = studyData.modules.length;
+            const completedInThisRound = studyData.daily.completed.length;
+            document.getElementById('todayProgress').textContent = `${completedInThisRound}/${totalModules}`;
+            // =======================================================
+            
             document.getElementById('totalQuestions').textContent = studyData.overall.totalQuestions;
             
             // 计算正确率
@@ -1118,8 +1123,8 @@
                 ((studyData.overall.totalCorrect / studyData.overall.totalQuestions) * 100).toFixed(1) : 0;
             document.getElementById('accuracyRate').textContent = `${accuracy}%`;
             
-            // 更新进度条
-            const progressPercent = (studyData.todayCompleted / studyData.modules.length) * 100;
+            // 更新进度条（显示当前轮次进度）
+            const progressPercent = (completedInThisRound / totalModules) * 100;
             document.getElementById('progressPercent').textContent = `${Math.round(progressPercent)}%`;
             document.getElementById('progressBar').style.width = `${progressPercent}%`;
             
@@ -1273,22 +1278,24 @@
         // 更新今日状态
         function updateDailyStatus() {
             const container = document.getElementById('dailyStatus');
-            const progress = studyData.todayCompleted / studyData.modules.length;
+            const completedCount = studyData.daily.completed.length;
+            const totalModules = studyData.modules.length;
+            const progress = completedCount / totalModules;
             const hour = new Date().getHours();
             
             let statusText = '';
             
-            if (progress === 0) {
-                statusText = '今日尚未开始学习';
+            if (completedCount === 0) {
+                statusText = '本轮尚未开始，从第一个模块开始吧！';
                 if (hour >= 10) statusText += ' ⏰';
             } else if (progress < 0.5) {
-                statusText = `已完成${studyData.todayCompleted}个模块，进度偏慢`;
-                if (hour >= 15) statusText += ' 🚨';
+                statusText = `本轮已完成${completedCount}个模块，进度${Math.round(progress*100)}%`;
+                if (hour >= 15 && progress < 0.3) statusText += ' 🚨';
             } else if (progress < 1) {
-                statusText = `已完成${studyData.todayCompleted}个模块，进度正常`;
+                statusText = `本轮已完成${completedCount}个模块，进度${Math.round(progress*100)}%`;
                 if (progress >= 0.75) statusText += ' 💪';
             } else {
-                statusText = '🎉 今日任务全部完成！';
+                statusText = '🎉 本轮任务全部完成！';
             }
             
             // 添加时间建议
@@ -1418,25 +1425,24 @@
                 showAlert(`${module.name}正确率仅${accuracy.toFixed(1)}%，需要重点复习！`, 'danger');
             }
             
-            // 检查是否完成一轮
-            if (studyData.todayCompleted >= studyData.modules.length) {
+            // ========== 核心修改3：检查是否完成一轮（所有模块都完成） ==========
+            if (studyData.daily.completed.length >= studyData.modules.length) {
+                // 完成一轮！
                 studyData.currentRound++;
                 studyData.totalRounds++;
-                studyData.todayCompleted = 0;
-                studyData.currentModuleIndex = 0;
+                
+                // 重置所有模块，开始新一轮
                 studyData.daily.completed = [];
+                studyData.currentModuleIndex = 0;
+                studyData.todayCompleted = 0;
+                studyData.daily.totalTime = 0;
+                
                 updateAIMessage('roundComplete');
             } else {
                 // 找到下一个未完成的模块
-                let nextIndex = -1;
-                for (let i = 0; i < studyData.modules.length; i++) {
-                    if (!studyData.daily.completed.includes(studyData.modules[i].id)) {
-                        nextIndex = i;
-                        break;
-                    }
-                }
-                studyData.currentModuleIndex = nextIndex;
+                studyData.currentModuleIndex = findFirstIncompleteModule();
             }
+            // ============================================================
             
             closeCompleteModal();
             updateDisplay();
@@ -1455,7 +1461,7 @@
             updateModuleEditList();
             document.getElementById('editModal').style.display = 'flex';
         }
-        
+    
         function updateModuleEditList() {
             const container = document.getElementById('moduleEditList');
             container.innerHTML = '';
@@ -1596,9 +1602,9 @@
             document.getElementById('resetModal').style.display = 'flex';
         }
         
-        // 重置今日进度
+        // 重置今日进度（现在重置的是当前轮次进度）
         function resetToday() {
-            if (!confirm('确定重置今日进度吗？今日完成的所有模块将被标记为未完成。')) return;
+            if (!confirm('确定重置当前轮次进度吗？所有已完成的模块将被标记为未完成，本轮重新开始。')) return;
             
             studyData.todayCompleted = 0;
             studyData.currentModuleIndex = 0;
@@ -1821,7 +1827,8 @@
             
             setInterval(() => {
                 if (Date.now() - lastActivity > 30 * 60 * 1000) { // 30分钟
-                    if (studyData.todayCompleted < studyData.modules.length) {
+                    const completedCount = studyData.daily.completed.length;
+                    if (completedCount < studyData.modules.length) {
                         updateAIMessage('lazy');
                         lastActivity = Date.now(); // 重置，避免重复提醒
                     }
