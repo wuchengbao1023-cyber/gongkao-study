@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>公考智能学习系统 | 你的专属学习教练</title>
+    <title>公考智能学习系统 | 手机优化修复版</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
@@ -18,8 +18,9 @@
             line-height: 1.6;
             color: #2c3e50;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            padding: 15px;
+            padding: 10px;
             min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
         }
         
         /* ===== 容器 ===== */
@@ -31,15 +32,15 @@
         /* ===== 顶部状态栏 ===== */
         .status-bar {
             background: white;
-            border-radius: 16px;
-            padding: 20px 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border-radius: 14px;
+            padding: 15px 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             border: 1px solid rgba(255,255,255,0.3);
             position: relative;
             overflow: hidden;
@@ -57,30 +58,32 @@
         
         .status-info {
             display: flex;
-            gap: 25px;
+            gap: 15px;
             flex-wrap: wrap;
             flex: 1;
+            justify-content: space-between;
         }
         
         .status-item {
             text-align: center;
-            min-width: 90px;
+            min-width: 70px;
+            flex: 1;
             position: relative;
         }
         
         .status-label {
-            font-size: 13px;
+            font-size: 12px;
             color: #7f8c8d;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .status-value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             color: #2c3e50;
             font-feature-settings: "tnum";
@@ -89,7 +92,7 @@
         /* ===== 主内容区域 ===== */
         .main-content {
             display: block;
-            gap: 20px;
+            gap: 15px;
         }
         
         @media (min-width: 992px) {
@@ -102,10 +105,10 @@
         /* ===== 左侧：学习区 ===== */
         .learning-area {
             background: white;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
             border: 1px solid rgba(255,255,255,0.3);
         }
         
@@ -113,12 +116,12 @@
         .ai-coach {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
-            border-radius: 14px;
-            margin-bottom: 25px;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
             display: flex;
             align-items: flex-start;
-            gap: 16px;
+            gap: 14px;
             position: relative;
             overflow: hidden;
         }
@@ -136,14 +139,14 @@
         }
         
         .coach-avatar {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             color: #667eea;
             flex-shrink: 0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -159,23 +162,24 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 15px;
         }
         
         .coach-text {
-            font-size: 15px;
+            font-size: 14px;
             opacity: 0.95;
         }
         
         /* 进度条 */
         .progress-container {
-            margin: 25px 0;
+            margin: 20px 0;
         }
         
         .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .progress-label {
@@ -184,18 +188,19 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 15px;
         }
         
         .progress-percent {
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
             color: #27ae60;
         }
         
         .progress-bar {
-            height: 10px;
+            height: 8px;
             background: #ecf0f1;
-            border-radius: 5px;
+            border-radius: 4px;
             overflow: hidden;
             position: relative;
         }
@@ -203,7 +208,7 @@
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #2ecc71, #27ae60);
-            border-radius: 5px;
+            border-radius: 4px;
             transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
@@ -230,34 +235,37 @@
         
         /* 模块列表 */
         .modules-list {
-            margin-top: 30px;
+            margin-top: 25px;
         }
         
         .modules-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .modules-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             color: #2c3e50;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .module-filters {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
         .filter-btn {
             padding: 6px 12px;
             border: 1px solid #dfe6e9;
-            border-radius: 20px;
+            border-radius: 18px;
             background: white;
             font-size: 13px;
             color: #636e72;
@@ -273,9 +281,9 @@
         
         .module-item {
             border: 1px solid #e0e6ed;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -284,7 +292,7 @@
         
         .module-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             border-color: #d0d9e6;
         }
         
@@ -312,45 +320,45 @@
         
         .module-number {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            width: 28px;
-            height: 28px;
+            top: 12px;
+            left: 12px;
+            width: 26px;
+            height: 26px;
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 3px 6px rgba(52, 152, 219, 0.3);
         }
         
         .module-content {
-            margin-left: 40px;
+            margin-left: 36px;
         }
         
         .module-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         
         .module-title {
             font-weight: 700;
-            font-size: 17px;
+            font-size: 16px;
             color: #2c3e50;
             line-height: 1.4;
         }
         
         .module-status {
-            font-size: 12px;
-            padding: 5px 12px;
-            border-radius: 20px;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 16px;
             font-weight: 600;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
         }
         
         .module-status.completed {
@@ -374,36 +382,37 @@
         }
         
         .module-meta {
-            font-size: 14px;
+            font-size: 13px;
             color: #636e72;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         
         .module-meta-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .module-stats {
             display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
         }
         
         .stat-badge {
-            font-size: 13px;
-            padding: 6px 12px;
+            font-size: 12px;
+            padding: 5px 10px;
             background: #f8f9fa;
-            border-radius: 12px;
+            border-radius: 10px;
             color: #2c3e50;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             border: 1px solid #edf2f7;
         }
         
@@ -414,26 +423,26 @@
         }
         
         .module-insights {
-            font-size: 13px;
+            font-size: 12px;
             color: #636e72;
-            padding: 10px 15px;
+            padding: 8px 12px;
             background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
             border-left: 3px solid #3498db;
         }
         
         .module-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
+            margin-top: 12px;
         }
         
         /* ===== 按钮样式 ===== */
         .btn {
-            padding: 12px 24px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -441,9 +450,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            min-height: 48px;
-            min-width: 48px;
+            gap: 6px;
+            min-height: 44px;
+            min-width: 44px;
             user-select: none;
             position: relative;
             overflow: hidden;
@@ -476,18 +485,18 @@
             background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
             flex: 1;
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
         }
         
         .btn-complete:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+            box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
         }
         
         .btn-details {
             background: #3498db;
             color: white;
-            padding: 10px 16px;
+            padding: 10px 14px;
         }
         
         .btn-reset {
@@ -508,16 +517,16 @@
         /* ===== 右侧：分析区 ===== */
         .analytics-area {
             background: white;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
             border: 1px solid rgba(255,255,255,0.3);
             height: fit-content;
         }
         
         .analytics-card {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .analytics-card:last-child {
@@ -525,43 +534,43 @@
         }
         
         .analytics-title {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 18px;
-            padding-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #f0f4f8;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         /* 学习仪表盘 */
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 15px;
         }
         
         .dashboard-stat {
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             background: #f8fafc;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid #edf2f7;
         }
         
         .dashboard-value {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             color: #2c3e50;
-            margin: 8px 0;
+            margin: 6px 0;
             font-feature-settings: "tnum";
         }
         
         .dashboard-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #718096;
             font-weight: 500;
         }
@@ -575,7 +584,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #f0f4f8;
         }
         
@@ -584,7 +593,7 @@
         }
         
         .weak-module-name {
-            font-size: 14px;
+            font-size: 13px;
             flex: 1;
         }
         
@@ -594,10 +603,10 @@
         }
         
         .accuracy-badge {
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 10px;
-            margin-left: 8px;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            margin-left: 6px;
             font-weight: 600;
         }
         
@@ -613,7 +622,7 @@
         
         /* 今日建议 */
         .daily-tips {
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.6;
             color: #4a5568;
         }
@@ -621,11 +630,11 @@
         .tip-item {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 12px;
-            padding: 12px;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 10px;
             background: #f8fafc;
-            border-radius: 10px;
+            border-radius: 8px;
             border-left: 3px solid #4299e1;
         }
         
@@ -639,8 +648,8 @@
         .control-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 25px;
+            gap: 10px;
+            margin-top: 20px;
         }
         
         .control-buttons .btn {
@@ -660,7 +669,7 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
             backdrop-filter: blur(5px);
             animation: modalFadeIn 0.3s ease;
         }
@@ -672,50 +681,50 @@
         
         .modal-content {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 550px;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
             width: 100%;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
             animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             border: 1px solid rgba(255,255,255,0.2);
         }
         
         @keyframes modalSlideIn {
-            from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            from { opacity: 0; transform: translateY(-20px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
         .modal-header {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
         }
         
         .modal-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .modal-subtitle {
-            font-size: 15px;
+            font-size: 14px;
             color: #718096;
         }
         
         /* 智能练习设置 */
         .practice-settings {
             background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 25px;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
             border: 1px solid #e2e8f0;
         }
         
         .setting-item {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         .setting-item:last-child {
@@ -726,7 +735,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .setting-label-text {
@@ -734,18 +743,19 @@
             color: #2c3e50;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 14px;
         }
         
         .setting-value {
             font-weight: 700;
             color: #4299e1;
-            font-size: 18px;
+            font-size: 16px;
         }
         
         .range-container {
             position: relative;
-            height: 40px;
+            height: 36px;
             display: flex;
             align-items: center;
         }
@@ -761,39 +771,39 @@
         
         .range-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             background: white;
             border: 3px solid #4299e1;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(66, 153, 225, 0.4);
+            box-shadow: 0 3px 6px rgba(66, 153, 225, 0.3);
             transition: all 0.2s;
         }
         
         .range-slider::-webkit-slider-thumb:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(66, 153, 225, 0.5);
+            box-shadow: 0 4px 8px rgba(66, 153, 225, 0.4);
         }
         
         .range-ticks {
             display: flex;
             justify-content: space-between;
-            margin-top: 5px;
-            padding: 0 10px;
+            margin-top: 4px;
+            padding: 0 8px;
         }
         
         .range-tick {
-            font-size: 11px;
+            font-size: 10px;
             color: #a0aec0;
         }
         
         .number-input {
-            width: 80px;
-            padding: 12px;
+            width: 70px;
+            padding: 10px;
             border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: 600;
             text-align: center;
             color: #2c3e50;
@@ -809,70 +819,72 @@
         /* 实时反馈 */
         .real-time-feedback {
             background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 20px 0;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 16px 0;
             border-left: 4px solid #48bb78;
         }
         
         .feedback-title {
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 14px;
         }
         
         .feedback-content {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 12px;
         }
         
         .feedback-item {
             text-align: center;
-            padding: 10px;
+            padding: 8px;
             background: #f0fff4;
-            border-radius: 8px;
+            border-radius: 6px;
         }
         
         .feedback-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #38a169;
-            margin: 5px 0;
+            margin: 4px 0;
         }
         
         .feedback-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #718096;
         }
         
         /* 表单组 */
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .form-label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #2c3e50;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 14px;
         }
         
         .form-textarea {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 15px;
+            border-radius: 10px;
+            font-size: 14px;
             line-height: 1.6;
             resize: vertical;
-            min-height: 100px;
+            min-height: 90px;
             transition: all 0.3s;
         }
         
@@ -885,24 +897,24 @@
         /* 底部信息 */
         .footer {
             text-align: center;
-            margin-top: 25px;
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             color: #718096;
-            font-size: 14px;
+            font-size: 13px;
             border-top: 1px solid #edf2f7;
         }
         
         /* 加载动画 */
         .loader {
             text-align: center;
-            padding: 40px;
+            padding: 30px;
         }
         
         .loader::after {
             content: '';
             display: inline-block;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: 3px solid #f1f5f9;
             border-top: 3px solid #4299e1;
             border-radius: 50%;
@@ -919,12 +931,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            margin-left: 5px;
+            margin-left: 4px;
         }
         
         .badge-fire {
@@ -942,26 +954,212 @@
             color: white;
         }
         
-        /* 响应式调整 */
-        @media (max-width: 768px) {
+        /* ===== 手机响应式优化 ===== */
+        @media (max-width: 767px) {
+            .status-bar {
+                padding: 14px;
+                border-radius: 12px;
+            }
+            
             .status-info {
-                gap: 15px;
+                gap: 10px;
             }
             
             .status-item {
-                min-width: 70px;
+                min-width: 65px;
+            }
+            
+            .status-value {
+                font-size: 18px;
+            }
+            
+            .ai-coach {
+                padding: 14px;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .coach-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .learning-area, .analytics-area {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            
+            .modules-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .module-filters {
+                justify-content: center;
+            }
+            
+            .module-item {
+                padding: 14px;
+            }
+            
+            .module-content {
+                margin-left: 34px;
+            }
+            
+            .module-title {
+                font-size: 15px;
+            }
+            
+            .module-meta {
+                font-size: 12px;
+                gap: 10px;
+            }
+            
+            .module-stats {
+                flex-direction: column;
+            }
+            
+            .module-actions {
+                flex-direction: column;
             }
             
             .dashboard-stats {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .dashboard-stat {
+                padding: 10px;
+            }
+            
+            .dashboard-value {
+                font-size: 18px;
             }
             
             .control-buttons {
                 grid-template-columns: 1fr;
             }
             
+            .modal {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                margin: 5px;
+                max-height: 90vh;
+            }
+            
+            .practice-settings {
+                padding: 14px;
+            }
+            
             .feedback-content {
                 grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .status-info {
+                justify-content: space-around;
+            }
+            
+            .status-item {
+                min-width: 60px;
+            }
+            
+            .status-value {
+                font-size: 16px;
+            }
+            
+            .module-item {
+                padding: 12px;
+            }
+            
+            .module-number {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+            
+            .module-content {
+                margin-left: 32px;
+            }
+            
+            .module-title {
+                font-size: 14px;
+            }
+            
+            .btn {
+                padding: 10px 16px;
+                min-height: 40px;
+                min-width: 40px;
+                font-size: 13px;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            body {
+                padding: 8px;
+            }
+            
+            .status-bar {
+                padding: 12px;
+            }
+            
+            .status-item {
+                min-width: 55px;
+            }
+            
+            .status-value {
+                font-size: 15px;
+            }
+            
+            .learning-area, .analytics-area {
+                padding: 14px;
+            }
+            
+            .module-meta {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .number-input {
+                width: 60px;
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+        
+        /* 横屏优化 */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .status-bar {
+                padding: 10px 14px;
+            }
+            
+            .ai-coach {
+                padding: 10px;
+                margin-bottom: 12px;
+            }
+            
+            .learning-area, .analytics-area {
+                padding: 12px;
+            }
+            
+            .module-item {
+                padding: 10px;
+                margin-bottom: 8px;
+            }
+            
+            .modal-content {
+                padding: 15px;
+                max-height: 85vh;
             }
         }
     </style>
@@ -986,10 +1184,6 @@
                 <div class="status-item">
                     <div class="status-label">✅ 正确率</div>
                     <div class="status-value" id="accuracyRate">0%</div>
-                </div>
-                <div class="status-item">
-                    <div class="status-label">⏱️ 学习时长</div>
-                    <div class="status-value" id="studyTime">0h</div>
                 </div>
             </div>
             <div>
@@ -1122,7 +1316,7 @@
         
         <div class="footer">
             <div>💾 数据自动保存在本地浏览器中 · 刷新页面不会丢失</div>
-            <div style="font-size: 12px; margin-top: 8px; color: #a0aec0;">公考智能学习系统 v2.0 | 你的专属学习教练</div>
+            <div style="font-size: 12px; margin-top: 8px; color: #a0aec0;">公考智能学习系统 v2.1 | 手机优化修复版</div>
         </div>
     </div>
     
@@ -1158,7 +1352,7 @@
                         <div class="setting-label-text">✅ 本次练习题数</div>
                         <div class="setting-value" id="currentQuestions">20</div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
                         <input type="range" class="range-slider" id="questionsSlider" min="5" max="100" value="20" style="flex: 1;">
                         <input type="number" class="number-input" id="questionsInput" min="5" max="100" value="20">
                         <span>题</span>
@@ -1170,7 +1364,7 @@
                         <div class="setting-label-text">❌ 错题数量</div>
                         <div class="setting-value" id="wrongCountDisplay">0</div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
                         <input type="range" class="range-slider" id="wrongRange" min="0" max="50" value="0" style="flex: 1;">
                         <input type="number" class="number-input" id="wrongInput" min="0" max="100" value="0">
                         <span>题</span>
@@ -1208,7 +1402,7 @@
             </div>
             
             <!-- 操作按钮 -->
-            <div style="display: flex; gap: 12px; margin-top: 30px;">
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
                 <button type="button" class="btn" onclick="closeCompleteModal()" style="flex: 1; background: #e2e8f0; color: #4a5568;">
                     取消
                 </button>
@@ -1230,7 +1424,7 @@
             <div id="statsContent">
                 <!-- 学习报告内容由JS生成 -->
             </div>
-            <div style="text-align: center; margin-top: 25px;">
+            <div style="text-align: center; margin-top: 20px;">
                 <button class="btn" onclick="closeStatsModal()" style="background: #e2e8f0; color: #4a5568; padding: 12px 30px;">
                     关闭
                 </button>
@@ -1239,8 +1433,6 @@
     </div>
     
     <!-- 其他弹窗（编辑模块、重置、清空数据等） -->
-    <!-- 由于代码长度限制，这些弹窗的HTML结构与之前类似，但已更新为新的样式 -->
-    <!-- 编辑模块弹窗 -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1250,13 +1442,13 @@
             <div class="module-edit-list" id="moduleEditList">
                 <!-- 编辑列表由JS生成 -->
             </div>
-            <div style="text-align: center; margin: 25px 0;">
+            <div style="text-align: center; margin: 20px 0;">
                 <button class="btn btn-manage" onclick="showAddModuleModal()">
                     <span>➕</span>
                     添加新模块
                 </button>
             </div>
-            <div style="display: flex; gap: 12px;">
+            <div style="display: flex; gap: 10px;">
                 <button class="btn btn-complete" onclick="saveModules()" style="flex: 1;">
                     <span>💾</span>
                     保存设置
@@ -1292,7 +1484,7 @@
                         <option value="专项训练">专项训练</option>
                     </select>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
                         <label class="form-label">⏱️ 建议时间</label>
                         <input type="number" class="form-textarea" id="newModuleTime" min="5" max="180" value="30" required style="height: auto; min-height: 0;">
@@ -1306,7 +1498,7 @@
                     <label class="form-label">💡 输出任务描述</label>
                     <textarea class="form-textarea" id="newModuleDesc" rows="3" placeholder="例如：每题总结解题思路"></textarea>
                 </div>
-                <div style="display: flex; gap: 12px; margin-top: 25px;">
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button type="button" class="btn" onclick="closeAddModuleModal()" style="flex: 1; background: #e2e8f0; color: #4a5568;">
                         取消
                     </button>
@@ -1326,11 +1518,11 @@
                 <div class="modal-subtitle">重置当前轮次的进度</div>
             </div>
             <div style="text-align: center; padding: 20px;">
-                <div style="font-size: 16px; color: #4a5568; margin-bottom: 25px; line-height: 1.6;">
+                <div style="font-size: 15px; color: #4a5568; margin-bottom: 20px; line-height: 1.6;">
                     这将清空当前轮次所有模块的完成状态，开始新一轮学习。<br>
                     <span style="color: #e53e3e; font-weight: 600;">历史统计数据不会受到影响。</span>
                 </div>
-                <div style="display: flex; gap: 12px; justify-content: center;">
+                <div style="display: flex; gap: 10px; justify-content: center;">
                     <button class="btn" onclick="closeResetModal()" style="background: #e2e8f0; color: #4a5568; padding: 12px 30px;">
                         取消
                     </button>
@@ -1350,23 +1542,23 @@
                 <div class="modal-subtitle">清空所有学习数据</div>
             </div>
             <div style="text-align: center; padding: 20px;">
-                <div style="font-size: 15px; color: #4a5568; margin-bottom: 20px; text-align: left; padding: 15px; background: #fff5f5; border-radius: 10px; border-left: 4px solid #e53e3e;">
-                    <div style="font-weight: 600; margin-bottom: 10px; color: #e53e3e;">这将删除所有学习记录，包括：</div>
-                    <ul style="margin-left: 20px; line-height: 1.8;">
+                <div style="font-size: 14px; color: #4a5568; margin-bottom: 15px; text-align: left; padding: 12px; background: #fff5f5; border-radius: 8px; border-left: 4px solid #e53e3e;">
+                    <div style="font-weight: 600; margin-bottom: 8px; color: #e53e3e;">这将删除所有学习记录，包括：</div>
+                    <ul style="margin-left: 20px; line-height: 1.6;">
                         <li>所有模块的历史统计数据</li>
                         <li>总体学习进度与轮次记录</li>
                         <li>连续学习天数记录</li>
                         <li>自定义的模块设置</li>
                     </ul>
                 </div>
-                <div style="font-size: 16px; color: #e53e3e; font-weight: 600; margin: 25px 0; padding: 15px; background: #fed7d7; border-radius: 10px;">
+                <div style="font-size: 15px; color: #e53e3e; font-weight: 600; margin: 20px 0; padding: 12px; background: #fed7d7; border-radius: 8px;">
                     🚨 此操作不可恢复！请谨慎操作。
                 </div>
                 <div class="form-group">
                     <label class="form-label">请输入"DELETE"确认操作：</label>
                     <input type="text" class="form-textarea" id="resetConfirmInput" placeholder="DELETE" oninput="this.value = this.value.toUpperCase()" style="height: auto; min-height: 0; text-align: center; letter-spacing: 2px;">
                 </div>
-                <div style="display: flex; gap: 12px; justify-content: center; margin-top: 25px;">
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
                     <button class="btn" onclick="closeClearAllModal()" style="background: #e2e8f0; color: #4a5568; padding: 12px 30px;">
                         取消
                     </button>
@@ -1381,8 +1573,8 @@
     
     <script>
         // ============================================
-        // 公考智能学习系统 v2.0
-        // 你的专属学习教练
+        // 公考智能学习系统 v2.1
+        // 手机优化修复版
         // ============================================
         
         // 学习数据
@@ -1488,10 +1680,10 @@
             // 每日记录
             daily: {
                 date: '',
-                completed: [], // 已完成的模块ID
+                completed: [], // 本轮已完成的模块ID
                 startTime: 0,
                 totalTime: 0,
-                sessions: [] // 今日练习记录
+                sessions: [] // 今日练习记录（包括重复练习）
             },
             
             // 历史记录
@@ -1550,7 +1742,7 @@
         
         // 初始化
         function init() {
-            console.log("🚀 公考智能学习系统 v2.0 初始化...");
+            console.log("🚀 公考智能学习系统 v2.1 初始化...");
             loadData();
             checkNewDay();
             updateDisplay();
@@ -1559,7 +1751,7 @@
             
             // 显示欢迎提示
             setTimeout(() => {
-                showNotification("欢迎使用公考智能学习系统", "你的专属学习教练已就位！", "info");
+                showNotification("欢迎使用公考智能学习系统", "手机优化修复版已就位！", "info");
             }, 1000);
         }
         
@@ -1844,10 +2036,6 @@
             const accuracy = studyData.overall.totalQuestions > 0 ? 
                 ((studyData.overall.totalCorrect / studyData.overall.totalQuestions) * 100).toFixed(1) : 0;
             document.getElementById('accuracyRate').textContent = `${accuracy}%`;
-            
-            // 学习时长
-            const totalHours = (studyData.overall.totalTime / 60).toFixed(1);
-            document.getElementById('studyTime').textContent = `${totalHours}h`;
         }
         
         // 更新进度条
@@ -1928,7 +2116,7 @@
                     }
                 }
                 
-                // 构建模块HTML
+                // 构建模块HTML（修复：所有模块都有练习按钮）
                 moduleDiv.innerHTML = `
                     <div class="module-number">${index + 1}</div>
                     <div class="module-content">
@@ -1971,18 +2159,17 @@
                             </div>
                         `}
                         
-                        ${!isCompleted ? `
-                            <div class="module-actions">
-                                <button class="btn btn-complete" onclick="completeModule(${index})" data-module-index="${index}">
-                                    <span>✅</span>
-                                    开始练习
-                                </button>
-                                <button class="btn btn-details" onclick="showModuleDetails(${index})">
-                                    <span>📊</span>
-                                    详情
-                                </button>
-                            </div>
-                        ` : ''}
+                        <!-- 修复：所有模块都有练习按钮 -->
+                        <div class="module-actions">
+                            <button class="btn btn-complete" onclick="completeModule(${index})" data-module-index="${index}">
+                                <span>${isCompleted ? '🔄' : '✅'}</span>
+                                ${isCompleted ? '再次练习' : '开始练习'}
+                            </button>
+                            <button class="btn btn-details" onclick="showModuleDetails(${index})">
+                                <span>📊</span>
+                                详情
+                            </button>
+                        </div>
                     </div>
                 `;
                 
@@ -1992,10 +2179,10 @@
             // 如果没有模块显示
             if (container.children.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #a0aec0;">
-                        <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
-                        <div style="font-size: 16px; margin-bottom: 10px;">没有找到符合条件的模块</div>
-                        <div style="font-size: 14px; color: #cbd5e0;">试试切换筛选条件或重置筛选</div>
+                    <div style="text-align: center; padding: 30px; color: #a0aec0;">
+                        <div style="font-size: 40px; margin-bottom: 15px;">📭</div>
+                        <div style="font-size: 15px; margin-bottom: 8px;">没有找到符合条件的模块</div>
+                        <div style="font-size: 13px; color: #cbd5e0;">试试切换筛选条件</div>
                     </div>
                 `;
             }
@@ -2213,10 +2400,10 @@
         }
         
         // ============================================
-        // 模块操作函数
+        // 模块操作函数（修复重复练习）
         // ============================================
         
-        // 完成模块
+        // 完成模块 - 支持重复练习
         function completeModule(index) {
             const module = studyData.modules[index];
             currentModuleInfo = {
@@ -2230,12 +2417,20 @@
                 }
             };
             
+            // 检查是否是重复练习
+            const isRepeated = studyData.daily.completed.includes(module.id);
+            
             // 智能建议题数
-            const recommendedQuestions = recommendQuestionCount(module.id);
+            let recommendedQuestions = recommendQuestionCount(module.id);
+            
+            // 如果是重复练习，建议更多题数
+            if (isRepeated) {
+                recommendedQuestions = Math.min(50, recommendedQuestions + 10);
+            }
             
             // 设置弹窗标题
-            document.getElementById('completeModuleTitle').textContent = `完成：${module.name}`;
-            document.getElementById('completeModuleSubtitle').textContent = module.desc;
+            document.getElementById('completeModuleTitle').textContent = `${isRepeated ? '再次练习：' : '完成：'}${module.name}`;
+            document.getElementById('completeModuleSubtitle').textContent = isRepeated ? '重复练习巩固提升，可以调整题量重点突破' : module.desc;
             
             // 设置智能建议
             document.getElementById('recommendedQuestions').textContent = recommendedQuestions;
@@ -2263,6 +2458,7 @@
             
             // 记录开始时间
             currentModuleInfo.startTime = Date.now();
+            currentModuleInfo.isRepeated = isRepeated;
         }
         
         // 更新实时反馈
@@ -2323,6 +2519,7 @@
             
             const module = currentModuleInfo.module;
             const stats = currentModuleInfo.stats;
+            const isRepeated = currentModuleInfo.isRepeated;
             
             // 计算本次练习数据
             const correctCount = practiceQuestions - wrongCount;
@@ -2346,7 +2543,8 @@
                 wrongCount: wrongCount,
                 accuracy: accuracy,
                 note: note,
-                timeSpent: practiceTime
+                timeSpent: practiceTime,
+                isRepeated: isRepeated
             });
             
             // 更新总体数据
@@ -2357,11 +2555,6 @@
             studyData.overall.avgQuestionsPerSession = studyData.overall.totalQuestions / studyData.overall.totalSessions;
             
             // 更新今日数据
-            if (!studyData.daily.completed.includes(module.id)) {
-                studyData.daily.completed.push(module.id);
-                studyData.todayCompleted++;
-            }
-            
             studyData.daily.totalTime += practiceTime;
             studyData.daily.sessions.push({
                 moduleId: module.id,
@@ -2370,8 +2563,15 @@
                 wrongCount: wrongCount,
                 accuracy: accuracy,
                 timeSpent: practiceTime,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                isRepeated: isRepeated
             });
+            
+            // 如果是首次完成这个模块（本轮），加入completed列表
+            if (!isRepeated && !studyData.daily.completed.includes(module.id)) {
+                studyData.daily.completed.push(module.id);
+                studyData.todayCompleted++;
+            }
             
             // 检查成就
             checkAchievements();
@@ -2386,6 +2586,11 @@
                 coachMessage = `👍 不错！${module.name}正确率${accuracy.toFixed(1)}%，继续加油！`;
             } else {
                 coachMessage = `📝 ${module.name}完成，正确率${accuracy.toFixed(1)}%，需要加强练习！`;
+            }
+            
+            // 如果是重复练习，添加提示
+            if (isRepeated) {
+                coachMessage = `🔄 重复练习完成！${coachMessage}`;
             }
             
             updateCoachMessage();
@@ -2627,7 +2832,7 @@
             
             const a = document.createElement('a');
             a.href = url;
-            a.download = `公考学习数据_${getTodayDate()}_v2.0.json`;
+            a.download = `公考学习数据_${getTodayDate()}_v2.1.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -2892,58 +3097,58 @@
             
             // 生成报告HTML
             let reportHTML = `
-                <div style="margin-bottom: 25px;">
-                    <div style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0;">📊 学习概览</div>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                        <div style="background: #f7fafc; padding: 15px; border-radius: 10px;">
-                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">总学习轮次</div>
-                            <div style="font-size: 24px; font-weight: 700; color: #2d3748;">${studyData.totalRounds}</div>
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">📊 学习概览</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">总学习轮次</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.totalRounds}</div>
                         </div>
-                        <div style="background: #f7fafc; padding: 15px; border-radius: 10px;">
-                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">连续学习天数</div>
-                            <div style="font-size: 24px; font-weight: 700; color: #2d3748;">${studyData.overall.streakDays}</div>
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">连续学习天数</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.overall.streakDays}</div>
                         </div>
-                        <div style="background: #f7fafc; padding: 15px; border-radius: 10px;">
-                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">总练习题数</div>
-                            <div style="font-size: 24px; font-weight: 700; color: #2d3748;">${totalQuestions}</div>
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">总练习题数</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${totalQuestions}</div>
                         </div>
-                        <div style="background: #f7fafc; padding: 15px; border-radius: 10px;">
-                            <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">平均正确率</div>
-                            <div style="font-size: 24px; font-weight: 700; color: #2d3748;">${overallAccuracy}%</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 25px;">
-                    <div style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0;">📈 模块表现分析</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div style="background: #f0fff4; padding: 15px; border-radius: 10px; border-left: 4px solid #38a169;">
-                            <div style="font-size: 14px; color: #276749; margin-bottom: 8px;">🏆 最佳表现模块</div>
-                            <div style="font-size: 18px; font-weight: 700; color: #276749; margin-bottom: 5px;">${bestModule ? bestModule.name : '暂无数据'}</div>
-                            <div style="font-size: 14px; color: #2d3748;">正确率：${bestModule ? bestAccuracy.toFixed(1) : 0}%</div>
-                        </div>
-                        <div style="background: #fff5f5; padding: 15px; border-radius: 10px; border-left: 4px solid #e53e3e;">
-                            <div style="font-size: 14px; color: #c53030; margin-bottom: 8px;">⚠️ 最需提高模块</div>
-                            <div style="font-size: 18px; font-weight: 700; color: #c53030; margin-bottom: 5px;">${worstModule ? worstModule.name : '暂无数据'}</div>
-                            <div style="font-size: 14px; color: #2d3748;">正确率：${worstModule ? worstAccuracy.toFixed(1) : 0}%</div>
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">平均正确率</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${overallAccuracy}%</div>
                         </div>
                     </div>
                 </div>
                 
-                <div style="margin-bottom: 25px;">
-                    <div style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0;">🎯 学习效率分析</div>
-                    <div style="background: #f7fafc; padding: 20px; border-radius: 10px;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 15px;">
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">📈 模块表现分析</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="background: #f0fff4; padding: 12px; border-radius: 8px; border-left: 4px solid #38a169;">
+                            <div style="font-size: 13px; color: #276749; margin-bottom: 6px;">🏆 最佳表现模块</div>
+                            <div style="font-size: 16px; font-weight: 700; color: #276749; margin-bottom: 4px;">${bestModule ? bestModule.name : '暂无数据'}</div>
+                            <div style="font-size: 13px; color: #2d3748;">正确率：${bestModule ? bestAccuracy.toFixed(1) : 0}%</div>
+                        </div>
+                        <div style="background: #fff5f5; padding: 12px; border-radius: 8px; border-left: 4px solid #e53e3e;">
+                            <div style="font-size: 13px; color: #c53030; margin-bottom: 6px;">⚠️ 最需提高模块</div>
+                            <div style="font-size: 16px; font-weight: 700; color: #c53030; margin-bottom: 4px;">${worstModule ? worstModule.name : '暂无数据'}</div>
+                            <div style="font-size: 13px; color: #2d3748;">正确率：${worstModule ? worstAccuracy.toFixed(1) : 0}%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">🎯 学习效率分析</div>
+                    <div style="background: #f7fafc; padding: 15px; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 12px;">
                             <div>
-                                <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">平均每次练习时长</div>
-                                <div style="font-size: 18px; font-weight: 700; color: #2d3748;">${totalTime}</div>
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">平均每次练习时长</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #2d3748;">${totalTime}</div>
                             </div>
                             <div>
-                                <div style="font-size: 14px; color: #718096; margin-bottom: 5px;">平均每次练习题数</div>
-                                <div style="font-size: 18px; font-weight: 700; color: #2d3748;">${avgQuestionsPerSession}题</div>
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">平均每次练习题数</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #2d3748;">${avgQuestionsPerSession}题</div>
                             </div>
                         </div>
-                        <div style="font-size: 14px; color: #4a5568; line-height: 1.6;">
+                        <div style="font-size: 13px; color: #4a5568; line-height: 1.6;">
                             ${studyData.overall.totalSessions > 0 ? 
                                 `基于${studyData.overall.totalSessions}次练习数据分析，你的学习效率${overallAccuracy >= 75 ? '较高' : '有待提高'}。` : 
                                 '练习数据不足，无法进行效率分析。'}
@@ -2952,9 +3157,9 @@
                 </div>
                 
                 <div>
-                    <div style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0;">💡 个性化建议</div>
-                    <div style="background: #ebf8ff; padding: 20px; border-radius: 10px; border-left: 4px solid #4299e1;">
-                        <div style="font-size: 14px; color: #2c5282; line-height: 1.6;">
+                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">💡 个性化建议</div>
+                    <div style="background: #ebf8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #4299e1;">
+                        <div style="font-size: 13px; color: #2c5282; line-height: 1.6;">
                             ${generatePersonalizedAdvice()}
                         </div>
                     </div>
@@ -3026,6 +3231,11 @@
                 updateRealTimeFeedback();
             }
         });
+        
+        // 模块详情函数（占位）
+        function showModuleDetails(index) {
+            alert("模块详情功能开发中...");
+        }
     </script>
 </body>
 </html>
