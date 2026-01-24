@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>公考智能学习系统 | 手机优化修复版</title>
+    <title>公考智能学习系统 | 完整自定义模块功能</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
@@ -23,7 +23,6 @@
             -webkit-text-size-adjust: 100%;
         }
         
-        /* ===== 容器 ===== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -119,9 +118,6 @@
             padding: 16px;
             border-radius: 12px;
             margin-bottom: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
             position: relative;
             overflow: hidden;
         }
@@ -138,36 +134,80 @@
             opacity: 0.3;
         }
         
+        .coach-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .coach-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        
         .coach-avatar {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             color: #667eea;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .coach-message {
-            flex: 1;
         }
         
         .coach-title {
             font-weight: 700;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 15px;
+            font-size: 16px;
         }
         
-        .coach-text {
+        .coach-message {
             font-size: 14px;
             opacity: 0.95;
+            line-height: 1.5;
+        }
+        
+        .coach-suggestion {
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            border-left: 3px solid rgba(255,255,255,0.3);
+        }
+        
+        .suggestion-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .suggestion-detail {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .suggestion-action {
+            display: block;
+            width: 100%;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .suggestion-action:hover {
+            background: rgba(255,255,255,0.3);
         }
         
         /* 进度条 */
@@ -209,28 +249,9 @@
             height: 100%;
             background: linear-gradient(90deg, #2ecc71, #27ae60);
             border-radius: 4px;
-            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: width 0.8s ease;
             position: relative;
             overflow: hidden;
-        }
-        
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255,255,255,0.4), 
-                transparent);
-            animation: shimmer 2s infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
         
         /* 模块列表 */
@@ -284,7 +305,7 @@
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
             position: relative;
             overflow: hidden;
             background: white;
@@ -293,7 +314,6 @@
         .module-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            border-color: #d0d9e6;
         }
         
         .module-item.completed {
@@ -422,16 +442,6 @@
             border-color: #bbdefb;
         }
         
-        .module-insights {
-            font-size: 12px;
-            color: #636e72;
-            padding: 8px 12px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            border-left: 3px solid #3498db;
-        }
-        
         .module-actions {
             display: flex;
             gap: 8px;
@@ -446,7 +456,7 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -454,43 +464,12 @@
             min-height: 44px;
             min-width: 44px;
             user-select: none;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-        
-        .btn:active::after {
-            animation: ripple 1s ease-out;
-        }
-        
-        @keyframes ripple {
-            0% { transform: scale(0, 0); opacity: 0.5; }
-            100% { transform: scale(20, 20); opacity: 0; }
         }
         
         .btn-complete {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
             flex: 1;
-            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-        }
-        
-        .btn-complete:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
         }
         
         .btn-details {
@@ -615,11 +594,6 @@
             color: #e53e3e;
         }
         
-        .accuracy-medium {
-            background: #fff5e6;
-            color: #dd6b20;
-        }
-        
         /* 今日建议 */
         .daily-tips {
             font-size: 13px;
@@ -687,14 +661,13 @@
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
-            animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: modalSlideIn 0.4s ease;
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.2);
         }
         
         @keyframes modalSlideIn {
-            from { opacity: 0; transform: translateY(-20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .modal-header {
@@ -714,7 +687,167 @@
             color: #718096;
         }
         
-        /* 智能练习设置 */
+        /* 模块编辑样式 */
+        .module-edit-list {
+            margin-bottom: 20px;
+        }
+        
+        .module-edit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .module-edit-item:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+        
+        .module-edit-item button {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .module-edit-item button:hover:not(:disabled) {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+        
+        .module-edit-item button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .module-edit-item .delete-btn {
+            border-color: #fed7d7;
+            color: #e53e3e;
+            background: #fff5f5;
+        }
+        
+        .module-edit-item .delete-btn:hover {
+            background: #fed7d7;
+        }
+        
+        /* 详情弹窗 */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-stat {
+            text-align: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+        
+        .detail-stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin: 8px 0;
+        }
+        
+        .detail-stat-label {
+            font-size: 12px;
+            color: #718096;
+        }
+        
+        .history-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .history-date {
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 4px;
+        }
+        
+        .history-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #4a5568;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+        
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            min-height: 90px;
+            transition: all 0.3s;
+        }
+        
+        .form-textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        /* 练习设置样式 */
         .practice-settings {
             background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
             border-radius: 12px;
@@ -725,10 +858,6 @@
         
         .setting-item {
             margin-bottom: 16px;
-        }
-        
-        .setting-item:last-child {
-            margin-bottom: 0;
         }
         
         .setting-label {
@@ -753,13 +882,6 @@
             font-size: 16px;
         }
         
-        .range-container {
-            position: relative;
-            height: 36px;
-            display: flex;
-            align-items: center;
-        }
-        
         .range-slider {
             width: 100%;
             height: 6px;
@@ -778,24 +900,6 @@
             border: 3px solid #4299e1;
             cursor: pointer;
             box-shadow: 0 3px 6px rgba(66, 153, 225, 0.3);
-            transition: all 0.2s;
-        }
-        
-        .range-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(66, 153, 225, 0.4);
-        }
-        
-        .range-ticks {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 4px;
-            padding: 0 8px;
-        }
-        
-        .range-tick {
-            font-size: 10px;
-            color: #a0aec0;
         }
         
         .number-input {
@@ -807,13 +911,6 @@
             font-weight: 600;
             text-align: center;
             color: #2c3e50;
-            transition: all 0.3s;
-        }
-        
-        .number-input:focus {
-            outline: none;
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
         }
         
         /* 实时反馈 */
@@ -860,101 +957,7 @@
             color: #718096;
         }
         
-        /* 表单组 */
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-        }
-        
-        .form-textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 14px;
-            line-height: 1.6;
-            resize: vertical;
-            min-height: 90px;
-            transition: all 0.3s;
-        }
-        
-        .form-textarea:focus {
-            outline: none;
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-        }
-        
-        /* 底部信息 */
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            color: #718096;
-            font-size: 13px;
-            border-top: 1px solid #edf2f7;
-        }
-        
-        /* 加载动画 */
-        .loader {
-            text-align: center;
-            padding: 30px;
-        }
-        
-        .loader::after {
-            content: '';
-            display: inline-block;
-            width: 36px;
-            height: 36px;
-            border: 3px solid #f1f5f9;
-            border-top: 3px solid #4299e1;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* 勋章系统 */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            font-size: 11px;
-            font-weight: 700;
-            margin-left: 4px;
-        }
-        
-        .badge-fire {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-        }
-        
-        .badge-star {
-            background: linear-gradient(135deg, #ffd93d, #ff9a00);
-            color: white;
-        }
-        
-        .badge-growth {
-            background: linear-gradient(135deg, #6bcf7f, #27ae60);
-            color: white;
-        }
-        
-        /* ===== 手机响应式优化 ===== */
+        /* ===== 响应式优化 ===== */
         @media (max-width: 767px) {
             .status-bar {
                 padding: 14px;
@@ -975,29 +978,17 @@
             
             .ai-coach {
                 padding: 14px;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
             }
             
             .coach-avatar {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
             }
             
             .learning-area, .analytics-area {
                 padding: 16px;
                 border-radius: 12px;
-            }
-            
-            .modules-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .module-filters {
-                justify-content: center;
             }
             
             .module-item {
@@ -1008,68 +999,23 @@
                 margin-left: 34px;
             }
             
-            .module-title {
-                font-size: 15px;
-            }
-            
-            .module-meta {
-                font-size: 12px;
-                gap: 10px;
-            }
-            
-            .module-stats {
-                flex-direction: column;
-            }
-            
-            .module-actions {
-                flex-direction: column;
-            }
-            
             .dashboard-stats {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
             
-            .dashboard-stat {
-                padding: 10px;
-            }
-            
-            .dashboard-value {
-                font-size: 18px;
-            }
-            
-            .control-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .modal {
-                padding: 10px;
-            }
-            
             .modal-content {
                 padding: 20px;
                 margin: 5px;
-                max-height: 90vh;
             }
             
-            .practice-settings {
-                padding: 14px;
-            }
-            
-            .feedback-content {
+            .detail-grid {
                 grid-template-columns: 1fr;
+                gap: 10px;
             }
         }
         
         @media (max-width: 480px) {
-            .status-info {
-                justify-content: space-around;
-            }
-            
-            .status-item {
-                min-width: 60px;
-            }
-            
             .status-value {
                 font-size: 16px;
             }
@@ -1078,88 +1024,17 @@
                 padding: 12px;
             }
             
-            .module-number {
-                width: 24px;
-                height: 24px;
-                font-size: 12px;
-            }
-            
             .module-content {
                 margin-left: 32px;
             }
             
-            .module-title {
-                font-size: 14px;
-            }
-            
             .btn {
                 padding: 10px 16px;
-                min-height: 40px;
-                min-width: 40px;
                 font-size: 13px;
             }
             
             .dashboard-stats {
                 grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            body {
-                padding: 8px;
-            }
-            
-            .status-bar {
-                padding: 12px;
-            }
-            
-            .status-item {
-                min-width: 55px;
-            }
-            
-            .status-value {
-                font-size: 15px;
-            }
-            
-            .learning-area, .analytics-area {
-                padding: 14px;
-            }
-            
-            .module-meta {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            
-            .number-input {
-                width: 60px;
-                padding: 8px;
-                font-size: 14px;
-            }
-        }
-        
-        /* 横屏优化 */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .status-bar {
-                padding: 10px 14px;
-            }
-            
-            .ai-coach {
-                padding: 10px;
-                margin-bottom: 12px;
-            }
-            
-            .learning-area, .analytics-area {
-                padding: 12px;
-            }
-            
-            .module-item {
-                padding: 10px;
-                margin-bottom: 8px;
-            }
-            
-            .modal-content {
-                padding: 15px;
-                max-height: 85vh;
             }
         }
     </style>
@@ -1187,25 +1062,38 @@
                 </div>
             </div>
             <div>
+                <!-- 真正的模块管理按钮 -->
                 <button class="btn btn-manage" onclick="showEditModal()">
-                    <span>⚙️</span>
-                    <span class="desktop-only">模块管理</span>
+                    <span>⚙️</span> 模块管理
                 </button>
+            </div>
+        </div>
+        
+        <!-- AI教练区域 -->
+        <div class="ai-coach">
+            <div class="coach-content">
+                <div class="coach-header">
+                    <div class="coach-avatar">👨‍🏫</div>
+                    <div>
+                        <div class="coach-title">智能学习教练</div>
+                        <div class="coach-message" id="coachMessage">正在分析你的学习数据...</div>
+                    </div>
+                </div>
+                <div class="coach-suggestion" id="coachSuggestion" style="display: none;">
+                    <div class="suggestion-title">
+                        <span>🎯 今日推荐</span>
+                    </div>
+                    <div class="suggestion-detail" id="recommendDetail"></div>
+                    <button class="suggestion-action" id="recommendBtn">
+                        🚀 开始练习此模块
+                    </button>
+                </div>
             </div>
         </div>
         
         <div class="main-content">
             <!-- 左侧：学习区 -->
             <div class="learning-area">
-                <!-- AI教练提醒 -->
-                <div class="ai-coach">
-                    <div class="coach-avatar">👨‍🏫</div>
-                    <div class="coach-message">
-                        <div class="coach-title">📢 你的专属学习教练</div>
-                        <div class="coach-text" id="coachMessage">准备好开始今天的学习了吗？系统会根据你的表现智能推荐练习内容！</div>
-                    </div>
-                </div>
-                
                 <!-- 进度条 -->
                 <div class="progress-container">
                     <div class="progress-header">
@@ -1281,14 +1169,6 @@
                             <div class="tip-icon">🎯</div>
                             <div>系统会根据你的历史表现智能推荐练习模块</div>
                         </div>
-                        <div class="tip-item">
-                            <div class="tip-icon">📝</div>
-                            <div>薄弱模块会自动建议增加题量，建议重点突破</div>
-                        </div>
-                        <div class="tip-item">
-                            <div class="tip-icon">⚡</div>
-                            <div>可以自由选择任意模块练习，不再受顺序限制</div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1297,142 +1177,49 @@
         <!-- 控制按钮 -->
         <div class="control-buttons">
             <button class="btn btn-reset" onclick="showResetModal()">
-                <span>🔄</span>
-                重置本轮
+                <span>🔄</span> 重置本轮
             </button>
             <button class="btn btn-reset" onclick="showClearAllModal()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
-                <span>🗑️</span>
-                清空数据
+                <span>🗑️</span> 清空数据
             </button>
             <button class="btn btn-export" onclick="exportData()">
-                <span>📤</span>
-                导出数据
+                <span>📤</span> 导出数据
             </button>
             <button class="btn btn-manage" onclick="showStatsModal()">
-                <span>📈</span>
-                学习报告
+                <span>📈</span> 学习报告
             </button>
         </div>
         
-        <div class="footer">
+        <div class="footer" style="text-align: center; margin-top: 20px; padding: 15px; color: #718096; font-size: 13px;">
             <div>💾 数据自动保存在本地浏览器中 · 刷新页面不会丢失</div>
-            <div style="font-size: 12px; margin-top: 8px; color: #a0aec0;">公考智能学习系统 v2.1 | 手机优化修复版</div>
+            <div style="font-size: 12px; margin-top: 8px; color: #a0aec0;">公考智能学习系统 v2.5 | 完整自定义模块功能</div>
         </div>
     </div>
     
-    <!-- 完成模块弹窗 -->
-    <div id="completeModal" class="modal">
+    <!-- ========== 弹窗区域 ========== -->
+    
+    <!-- 模块详情弹窗 -->
+    <div id="detailModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" id="completeModuleTitle">完成模块</div>
-                <div class="modal-subtitle" id="completeModuleSubtitle">请填写本次练习的详细信息</div>
+                <div class="modal-title" id="detailTitle">模块详情</div>
+                <div class="modal-subtitle" id="detailSubtitle">查看详细统计与历史记录</div>
             </div>
-            
-            <!-- 智能练习设置 -->
-            <div class="practice-settings">
-                <div class="setting-item">
-                    <div class="setting-label">
-                        <div class="setting-label-text">🎯 智能建议题数</div>
-                        <div class="setting-value" id="recommendedQuestions">20</div>
-                    </div>
-                    <div class="range-container">
-                        <input type="range" class="range-slider" id="questionsRange" min="15" max="50" value="20" step="5">
-                    </div>
-                    <div class="range-ticks">
-                        <span class="range-tick">15</span>
-                        <span class="range-tick">25</span>
-                        <span class="range-tick">35</span>
-                        <span class="range-tick">45</span>
-                        <span class="range-tick">50+</span>
-                    </div>
-                </div>
-                
-                <div class="setting-item">
-                    <div class="setting-label">
-                        <div class="setting-label-text">✅ 本次练习题数</div>
-                        <div class="setting-value" id="currentQuestions">20</div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <input type="range" class="range-slider" id="questionsSlider" min="5" max="100" value="20" style="flex: 1;">
-                        <input type="number" class="number-input" id="questionsInput" min="5" max="100" value="20">
-                        <span>题</span>
-                    </div>
-                </div>
-                
-                <div class="setting-item">
-                    <div class="setting-label">
-                        <div class="setting-label-text">❌ 错题数量</div>
-                        <div class="setting-value" id="wrongCountDisplay">0</div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <input type="range" class="range-slider" id="wrongRange" min="0" max="50" value="0" style="flex: 1;">
-                        <input type="number" class="number-input" id="wrongInput" min="0" max="100" value="0">
-                        <span>题</span>
-                    </div>
-                </div>
+            <div id="detailContent">
+                <!-- 详情内容由JS动态生成 -->
             </div>
-            
-            <!-- 实时反馈 -->
-            <div class="real-time-feedback" id="realTimeFeedback">
-                <div class="feedback-title">📊 实时计算结果</div>
-                <div class="feedback-content">
-                    <div class="feedback-item">
-                        <div class="feedback-value" id="accuracyDisplay">100%</div>
-                        <div class="feedback-label">本次正确率</div>
-                    </div>
-                    <div class="feedback-item">
-                        <div class="feedback-value" id="totalQuestionsDisplay">0</div>
-                        <div class="feedback-label">累计题数</div>
-                    </div>
-                    <div class="feedback-item">
-                        <div class="feedback-value" id="avgAccuracyDisplay">0%</div>
-                        <div class="feedback-label">历史平均</div>
-                    </div>
-                    <div class="feedback-item">
-                        <div class="feedback-value" id="progressDisplay">-</div>
-                        <div class="feedback-label">对比上次</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 练习备注 -->
-            <div class="form-group">
-                <label class="form-label">📝 本次练习重点与心得</label>
-                <textarea class="form-textarea" id="noteInput" placeholder="记录本次练习的收获、难点、需要注意的地方...（可选）"></textarea>
-            </div>
-            
-            <!-- 操作按钮 -->
             <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button type="button" class="btn" onclick="closeCompleteModal()" style="flex: 1; background: #e2e8f0; color: #4a5568;">
-                    取消
+                <button type="button" class="btn btn-complete" onclick="startDetailModule()" style="flex: 1;">
+                    <span>✅</span> 开始练习
                 </button>
-                <button type="button" class="btn btn-complete" onclick="submitComplete()" style="flex: 2;">
-                    <span>✅</span>
-                    确认完成练习
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 学习报告弹窗 -->
-    <div id="statsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">📈 详细学习报告</div>
-                <div class="modal-subtitle">深度分析你的学习表现与进步趋势</div>
-            </div>
-            <div id="statsContent">
-                <!-- 学习报告内容由JS生成 -->
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="btn" onclick="closeStatsModal()" style="background: #e2e8f0; color: #4a5568; padding: 12px 30px;">
+                <button type="button" class="btn" onclick="closeDetailModal()" style="flex: 1; background: #e2e8f0; color: #4a5568;">
                     关闭
                 </button>
             </div>
         </div>
     </div>
     
-    <!-- 其他弹窗（编辑模块、重置、清空数据等） -->
+    <!-- 模块管理弹窗 -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1440,7 +1227,7 @@
                 <div class="modal-subtitle">自定义你的学习模块与设置</div>
             </div>
             <div class="module-edit-list" id="moduleEditList">
-                <!-- 编辑列表由JS生成 -->
+                <!-- 编辑列表由JS动态生成 -->
             </div>
             <div style="text-align: center; margin: 20px 0;">
                 <button class="btn btn-manage" onclick="showAddModuleModal()">
@@ -1470,33 +1257,35 @@
             <form id="addModuleForm" onsubmit="return false;">
                 <div class="form-group">
                     <label class="form-label">📝 模块名称</label>
-                    <input type="text" class="form-textarea" id="newModuleName" placeholder="例如：申论写作训练" required style="height: auto; min-height: 0;">
+                    <input type="text" class="form-input" id="newModuleName" placeholder="例如：政治理论专题" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">🏷️ 模块分类</label>
-                    <select class="form-textarea" id="newModuleCategory" style="height: auto; min-height: 0;">
+                    <select class="form-select" id="newModuleCategory">
                         <option value="言语理解">言语理解</option>
                         <option value="判断推理">判断推理</option>
                         <option value="资料分析">资料分析</option>
                         <option value="数量关系">数量关系</option>
                         <option value="申论">申论</option>
                         <option value="常识">常识</option>
+                        <option value="政治理论">政治理论</option>
                         <option value="专项训练">专项训练</option>
+                        <option value="其他">其他</option>
                     </select>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
                         <label class="form-label">⏱️ 建议时间</label>
-                        <input type="number" class="form-textarea" id="newModuleTime" min="5" max="180" value="30" required style="height: auto; min-height: 0;">
+                        <input type="number" class="form-input" id="newModuleTime" min="5" max="180" value="30" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">📝 建议题量</label>
-                        <input type="number" class="form-textarea" id="newModuleQuestions" min="1" max="100" value="20" required style="height: auto; min-height: 0;">
+                        <input type="number" class="form-input" id="newModuleQuestions" min="1" max="100" value="20" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">💡 输出任务描述</label>
-                    <textarea class="form-textarea" id="newModuleDesc" rows="3" placeholder="例如：每题总结解题思路"></textarea>
+                    <textarea class="form-textarea" id="newModuleDesc" rows="3" placeholder="例如：每题总结解题思路，记录易错点"></textarea>
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button type="button" class="btn" onclick="closeAddModuleModal()" style="flex: 1; background: #e2e8f0; color: #4a5568;">
@@ -1507,6 +1296,71 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+    
+    <!-- 其他弹窗（完成练习、重置、清空数据等） -->
+    <div id="completeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="completeModuleTitle">完成模块</div>
+                <div class="modal-subtitle" id="completeModuleSubtitle">请填写本次练习的详细信息</div>
+            </div>
+            
+            <div class="practice-settings">
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-label-text">✅ 本次练习题数</div>
+                        <div class="setting-value" id="currentQuestions">20</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" class="range-slider" id="questionsSlider" min="5" max="100" value="20" style="flex: 1;">
+                        <input type="number" class="number-input" id="questionsInput" min="5" max="100" value="20">
+                        <span>题</span>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-label-text">❌ 错题数量</div>
+                        <div class="setting-value" id="wrongCountDisplay">0</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" class="range-slider" id="wrongRange" min="0" max="50" value="0" style="flex: 1;">
+                        <input type="number" class="number-input" id="wrongInput" min="0" max="100" value="0">
+                        <span>题</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="real-time-feedback" id="realTimeFeedback">
+                <div class="feedback-title">📊 实时计算结果</div>
+                <div class="feedback-content">
+                    <div class="feedback-item">
+                        <div class="feedback-value" id="accuracyDisplay">100%</div>
+                        <div class="feedback-label">本次正确率</div>
+                    </div>
+                    <div class="feedback-item">
+                        <div class="feedback-value" id="totalQuestionsDisplay">0</div>
+                        <div class="feedback-label">累计题数</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">📝 本次练习重点与心得</label>
+                <textarea class="form-textarea" id="noteInput" placeholder="记录本次练习的收获、难点、需要注意的地方...（可选）"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button type="button" class="btn" onclick="closeCompleteModal()" style="flex: 1; background: #e2e8f0; color: #4a5568;">
+                    取消
+                </button>
+                <button type="button" class="btn btn-complete" onclick="submitComplete()" style="flex: 2;">
+                    <span>✅</span>
+                    确认完成练习
+                </button>
+            </div>
         </div>
     </div>
     
@@ -1556,7 +1410,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">请输入"DELETE"确认操作：</label>
-                    <input type="text" class="form-textarea" id="resetConfirmInput" placeholder="DELETE" oninput="this.value = this.value.toUpperCase()" style="height: auto; min-height: 0; text-align: center; letter-spacing: 2px;">
+                    <input type="text" class="form-input" id="resetConfirmInput" placeholder="DELETE" oninput="this.value = this.value.toUpperCase()" style="text-align: center; letter-spacing: 2px;">
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
                     <button class="btn" onclick="closeClearAllModal()" style="background: #e2e8f0; color: #4a5568; padding: 12px 30px;">
@@ -1571,202 +1425,111 @@
         </div>
     </div>
     
+    <!-- 学习报告弹窗（简化版） -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">📈 学习报告</div>
+                <div class="modal-subtitle">你的学习进度与统计</div>
+            </div>
+            <div id="statsContent" style="padding: 20px;">
+                <div style="text-align: center; padding: 20px;">
+                    <div class="loader"></div>
+                    <div style="margin-top: 15px; color: #718096;">正在生成学习报告...</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="closeStatsModal()" style="background: #e2e8f0; color: #4a5568; padding: 12px 30px;">
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // ============================================
-        // 公考智能学习系统 v2.1
-        // 手机优化修复版
+        // 公考智能学习系统 v2.5
+        // 完整自定义模块功能版
         // ============================================
         
         // 学习数据
         const studyData = {
-            // 系统状态
             currentDate: '',
             currentRound: 1,
             currentModuleIndex: 0,
             todayCompleted: 0,
             totalRounds: 0,
             
-            // 总体统计
             overall: {
                 totalQuestions: 0,
                 totalCorrect: 0,
                 streakDays: 0,
                 totalDays: 0,
                 lastStudyDate: '',
-                totalTime: 0, // 分钟
-                totalSessions: 0, // 练习次数
-                avgQuestionsPerSession: 0, // 平均每次题数
+                totalTime: 0,
+                totalSessions: 0,
+                avgQuestionsPerSession: 0,
             },
             
-            // 模块定义（默认）
             modules: [
-                { 
-                    id: 1, 
-                    name: "言语片段阅读", 
-                    category: "言语理解",
-                    time: 30, 
-                    questions: 20, 
-                    desc: "每题≤10字写核心论点",
-                    order: 1 
-                },
-                { 
-                    id: 2, 
-                    name: "逻辑判断", 
-                    category: "判断推理",
-                    time: 35, 
-                    questions: 20, 
-                    desc: "写论证类型+逻辑链",
-                    order: 2 
-                },
-                { 
-                    id: 3, 
-                    name: "资料分析", 
-                    category: "资料分析",
-                    time: 35, 
-                    questions: 20, 
-                    desc: "口述最难计算思路",
-                    order: 3 
-                },
-                { 
-                    id: 4, 
-                    name: "言语填空", 
-                    category: "言语理解",
-                    time: 30, 
-                    questions: 20, 
-                    desc: "记录犹豫选项并辨析",
-                    order: 4 
-                },
-                { 
-                    id: 5, 
-                    name: "图形推理", 
-                    category: "判断推理",
-                    time: 25, 
-                    questions: 20, 
-                    desc: "注错/慢题'死在何步'",
-                    order: 5 
-                },
-                { 
-                    id: 6, 
-                    name: "定义判断", 
-                    category: "判断推理",
-                    time: 25, 
-                    questions: 20, 
-                    desc: "先自话重述定义",
-                    order: 6 
-                },
-                { 
-                    id: 7, 
-                    name: "类比推理", 
-                    category: "判断推理",
-                    time: 20, 
-                    questions: 20, 
-                    desc: "错题反向构造例子",
-                    order: 7 
-                },
-                { 
-                    id: 8, 
-                    name: "终极任务", 
-                    category: "综合训练",
-                    time: 60, 
-                    questions: 1, 
-                    desc: "申论/错杀/体能三选一",
-                    order: 8 
-                }
+                { id: 1, name: "言语片段阅读", category: "言语理解", time: 30, questions: 20, desc: "每题≤10字写核心论点", order: 1 },
+                { id: 2, name: "逻辑判断", category: "判断推理", time: 35, questions: 20, desc: "写论证类型+逻辑链", order: 2 },
+                { id: 3, name: "资料分析", category: "资料分析", time: 35, questions: 20, desc: "口述最难计算思路", order: 3 },
+                { id: 4, name: "言语填空", category: "言语理解", time: 30, questions: 20, desc: "记录犹豫选项并辨析", order: 4 },
+                { id: 5, name: "图形推理", category: "判断推理", time: 25, questions: 20, desc: "注错/慢题'死在何步'", order: 5 },
+                { id: 6, name: "定义判断", category: "判断推理", time: 25, questions: 20, desc: "先自话重述定义", order: 6 },
+                { id: 7, name: "类比推理", category: "判断推理", time: 20, questions: 20, desc: "错题反向构造例子", order: 7 },
+                { id: 8, name: "终极任务", category: "综合训练", time: 60, questions: 1, desc: "申论/错杀/体能三选一", order: 8 }
             ],
             
-            // 模块统计数据
             moduleStats: {},
             
-            // 每日记录
             daily: {
                 date: '',
-                completed: [], // 本轮已完成的模块ID
+                completed: [],
                 startTime: 0,
                 totalTime: 0,
-                sessions: [] // 今日练习记录（包括重复练习）
-            },
-            
-            // 历史记录
-            history: [],
-            
-            // 成就系统
-            achievements: {
-                totalQuestionsMilestones: [100, 500, 1000, 5000],
-                streakMilestones: [3, 7, 14, 30, 100],
-                accuracyMilestones: [70, 80, 90, 95],
-                completed: []
+                sessions: []
             }
         };
         
-        // AI教练消息库
-        const coachMessages = {
-            // 问候类
-            greetings: [
-                "准备好开始今天的学习了吗？系统会根据你的表现智能推荐练习内容！",
-                "欢迎回来！今天也要全力以赴，向目标迈进！",
-                "新的一天，新的开始！让我们继续攻克薄弱环节！",
-                "检测到你已连续学习{streakDays}天，继续保持这个势头！"
-            ],
-            
-            // 进度类
-            progress: [
-                "当前进度{completed}/{total}，继续加油！",
-                "已完成{percent}%，今天状态不错！",
-                "保持这个节奏，今天就能完成本轮学习！"
-            ],
-            
-            // 成就类
-            achievements: [
-                "🎉 恭喜！你刚刚完成了第{milestone}题！",
-                "🔥 太棒了！连续学习{streakDays}天成就达成！",
-                "💎 完美！{moduleName}模块正确率突破{accuracy}%！"
-            ],
-            
-            // 建议类
-            suggestions: [
-                "建议今天重点练习薄弱模块：{weakModule}",
-                "检测到你已练习{hours}小时，适当休息一下吧！",
-                "最近{moduleName}进步明显，继续保持！"
-            ],
-            
-            // 警告类
-            warnings: [
-                "⚠️ 注意！{moduleName}模块正确率只有{accuracy}%，需要加强！",
-                "检测到长时间未练习{moduleName}，建议今天复习一下",
-                "最近正确率有所下滑，建议放慢节奏，注重质量"
-            ]
+        // 当前推荐的模块信息
+        let currentRecommendation = {
+            index: -1,
+            reason: ''
         };
+        
+        // 当前查看详情的模块索引
+        let currentDetailIndex = -1;
         
         // 当前练习的模块信息
         let currentModuleInfo = null;
         
+        // ============================================
         // 初始化
+        // ============================================
+        
         function init() {
-            console.log("🚀 公考智能学习系统 v2.1 初始化...");
+            console.log("🚀 系统初始化...");
             loadData();
             checkNewDay();
+            initModuleStats();
+            updateRecommendation();
             updateDisplay();
             setupEventListeners();
-            updateCoachMessage();
             
-            // 显示欢迎提示
-            setTimeout(() => {
-                showNotification("欢迎使用公考智能学习系统", "手机优化修复版已就位！", "info");
-            }, 1000);
+            // 设置推荐按钮事件
+            document.getElementById('recommendBtn').onclick = startRecommended;
         }
         
-        // 加载数据
         function loadData() {
             const saved = localStorage.getItem('studyData');
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
-                    
-                    // 智能合并数据
                     Object.keys(data).forEach(key => {
                         if (studyData[key] !== undefined) {
                             if (typeof studyData[key] === 'object' && studyData[key] !== null) {
-                                // 深度合并对象
                                 Object.keys(data[key]).forEach(subKey => {
                                     studyData[key][subKey] = data[key][subKey];
                                 });
@@ -1775,33 +1538,13 @@
                             }
                         }
                     });
-                    
-                    // 初始化moduleStats（兼容旧数据）
-                    studyData.modules.forEach(module => {
-                        if (!studyData.moduleStats[module.id]) {
-                            studyData.moduleStats[module.id] = {
-                                attempts: 0,
-                                totalQuestions: 0,
-                                totalCorrect: 0,
-                                bestAccuracy: 0,
-                                lastAccuracy: 0,
-                                history: [],
-                                lastPracticeDate: '',
-                                streak: 0,
-                                avgQuestions: module.questions
-                            };
-                        }
-                    });
-                    
                     console.log('✅ 数据加载成功');
                 } catch (e) {
-                    console.error('❌ 数据加载失败，使用默认数据', e);
-                    // 使用默认数据
+                    console.error('❌ 数据加载失败', e);
                 }
             }
         }
         
-        // 保存数据
         function saveData() {
             try {
                 localStorage.setItem('studyData', JSON.stringify(studyData));
@@ -1813,128 +1556,214 @@
             }
         }
         
-        // 显示通知
-        function showNotification(title, message, type = 'info') {
-            // 这里可以添加更美观的通知系统
-            console.log(`📢 ${title}: ${message}`);
+        function initModuleStats() {
+            studyData.modules.forEach(module => {
+                if (!studyData.moduleStats[module.id]) {
+                    studyData.moduleStats[module.id] = {
+                        attempts: 0,
+                        totalQuestions: 0,
+                        totalCorrect: 0,
+                        bestAccuracy: 0,
+                        lastAccuracy: 0,
+                        history: [],
+                        lastPracticeDate: '',
+                        streak: 0,
+                        avgQuestions: module.questions
+                    };
+                }
+            });
         }
         
         // ============================================
-        // 智能核心算法
+        // 模块详情功能
         // ============================================
         
-        // 智能推荐下一个模块
+        function showModuleDetails(index) {
+            const module = studyData.modules[index];
+            const stats = studyData.moduleStats[module.id] || {
+                attempts: 0,
+                totalQuestions: 0,
+                totalCorrect: 0,
+                history: []
+            };
+            
+            currentDetailIndex = index;
+            
+            const accuracy = stats.attempts > 0 ? 
+                (stats.totalCorrect / stats.totalQuestions * 100).toFixed(1) : 0;
+            const bestAccuracy = stats.bestAccuracy ? stats.bestAccuracy.toFixed(1) : 0;
+            const avgQuestions = stats.avgQuestions ? stats.avgQuestions.toFixed(0) : module.questions;
+            
+            let historyHTML = '<div style="font-weight: 600; margin: 15px 0 10px 0; color: #2c3e50;">最近练习记录</div>';
+            
+            if (stats.history.length === 0) {
+                historyHTML += '<div style="text-align: center; padding: 20px; color: #a0aec0; font-size: 14px;">暂无练习记录</div>';
+            } else {
+                stats.history.slice(-3).reverse().forEach(record => {
+                    const date = new Date(record.date);
+                    const dateStr = `${date.getMonth()+1}月${date.getDate()}日`;
+                    
+                    historyHTML += `
+                        <div class="history-item">
+                            <div class="history-date">${dateStr} ${record.isRepeated ? '🔄 重复练习' : ''}</div>
+                            <div class="history-stats">
+                                <span>做题：${record.practiceQuestions}题</span>
+                                <span>错题：${record.wrongCount}题</span>
+                                <span style="font-weight: 700; color: ${record.accuracy >= 80 ? '#27ae60' : record.accuracy >= 70 ? '#f39c12' : '#e74c3c'}">
+                                    正确率：${record.accuracy.toFixed(1)}%
+                                </span>
+                            </div>
+                            ${record.note ? `<div style="margin-top: 8px; font-size: 12px; color: #666; padding: 6px; background: #f8f9fa; border-radius: 4px;">📝 ${record.note}</div>` : ''}
+                        </div>
+                    `;
+                });
+                
+                if (stats.history.length > 3) {
+                    historyHTML += `<div style="text-align: center; margin-top: 10px; font-size: 12px; color: #718096;">还有${stats.history.length - 3}条历史记录</div>`;
+                }
+            }
+            
+            document.getElementById('detailTitle').textContent = module.name;
+            document.getElementById('detailSubtitle').textContent = module.desc;
+            
+            document.getElementById('detailContent').innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <div class="detail-grid">
+                        <div class="detail-stat">
+                            <div class="detail-stat-value">${stats.attempts || 0}</div>
+                            <div class="detail-stat-label">练习次数</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div class="detail-stat-value">${accuracy}%</div>
+                            <div class="detail-stat-label">平均正确率</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div class="detail-stat-value">${bestAccuracy}%</div>
+                            <div class="detail-stat-label">最佳正确率</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div class="detail-stat-value">${avgQuestions}</div>
+                            <div class="detail-stat-label">平均题量/次</div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${historyHTML}
+            `;
+            
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+        
+        function startDetailModule() {
+            if (currentDetailIndex >= 0) {
+                closeDetailModal();
+                completeModule(currentDetailIndex);
+            }
+        }
+        
+        function closeDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
+            currentDetailIndex = -1;
+        }
+        
+        // ============================================
+        // 智能推荐功能
+        // ============================================
+        
         function findRecommendedModule() {
             const uncompletedModules = studyData.modules.filter(
                 module => !studyData.daily.completed.includes(module.id)
             );
             
-            if (uncompletedModules.length === 0) return 0;
-            
-            // 为每个未完成模块计算推荐分数
-            const scoredModules = uncompletedModules.map(module => {
-                const stats = studyData.moduleStats[module.id] || {
-                    attempts: 0,
-                    totalQuestions: 0,
-                    totalCorrect: 0,
-                    history: []
-                };
-                
-                let score = 0;
-                
-                // 1. 薄弱程度（正确率越低分数越高）
-                if (stats.attempts > 0) {
-                    const accuracy = stats.totalCorrect / stats.totalQuestions;
-                    const weaknessScore = (1 - accuracy) * 100; // 0-100分
-                    score += weaknessScore * 0.6; // 权重60%
-                } else {
-                    score += 50; // 新模块中等优先级
-                }
-                
-                // 2. 练习频率（最近没练的优先）
-                if (stats.lastPracticeDate) {
-                    const daysSinceLast = Math.floor((new Date() - new Date(stats.lastPracticeDate)) / (1000 * 60 * 60 * 24));
-                    const recencyScore = Math.min(daysSinceLast * 10, 50); // 最多50分
-                    score += recencyScore * 0.3; // 权重30%
-                } else {
-                    score += 30; // 从未练习过
-                }
-                
-                // 3. 进步趋势（正在进步的适当降低优先级）
-                if (stats.history.length >= 3) {
-                    const recent = stats.history.slice(-3);
-                    const trend = recent[2].accuracy - recent[0].accuracy;
-                    const trendScore = trend > 5 ? -20 : (trend < -5 ? 10 : 0);
-                    score += trendScore * 0.1; // 权重10%
-                }
-                
-                return {
-                    module: module,
-                    score: score,
-                    stats: stats
-                };
-            });
-            
-            // 按分数从高到低排序
-            scoredModules.sort((a, b) => b.score - a.score);
-            
-            // 返回最推荐模块的索引
-            const recommendedModule = scoredModules[0].module;
-            return studyData.modules.findIndex(m => m.id === recommendedModule.id);
-        }
-        
-        // 智能建议练习题数
-        function recommendQuestionCount(moduleId) {
-            const module = studyData.modules.find(m => m.id === moduleId);
-            const stats = studyData.moduleStats[moduleId];
-            
-            if (!stats || stats.attempts === 0) {
-                // 新模块：使用模块默认题数
-                return module.questions;
+            if (uncompletedModules.length === 0) {
+                return findWeakestModule();
             }
             
-            const accuracy = stats.totalCorrect / stats.totalQuestions;
+            for (let i = 0; i < studyData.modules.length; i++) {
+                const module = studyData.modules[i];
+                if (!studyData.daily.completed.includes(module.id)) {
+                    const stats = studyData.moduleStats[module.id];
+                    if (stats && stats.attempts > 0) {
+                        const accuracy = stats.totalCorrect / stats.totalQuestions;
+                        if (accuracy < 0.65) {
+                            return { index: i, reason: `薄弱模块（正确率${(accuracy*100).toFixed(1)}%）` };
+                        }
+                    }
+                }
+            }
             
-            // 根据正确率智能建议题数
-            if (accuracy < 0.6) {
-                // 薄弱模块：建议加量练习
-                return Math.max(module.questions, 30); // 至少30题
-            } else if (accuracy < 0.7) {
-                // 一般模块：适量增加
-                return Math.max(module.questions, 25); // 至少25题
-            } else if (accuracy < 0.8) {
-                // 良好模块：维持
-                return module.questions;
+            for (let i = 0; i < studyData.modules.length; i++) {
+                const module = studyData.modules[i];
+                if (!studyData.daily.completed.includes(module.id)) {
+                    const stats = studyData.moduleStats[module.id];
+                    if (!stats || stats.attempts === 0) {
+                        return { index: i, reason: '新模块，建议尽早开始' };
+                    }
+                }
+            }
+            
+            for (let i = 0; i < studyData.modules.length; i++) {
+                if (!studyData.daily.completed.includes(studyData.modules[i].id)) {
+                    return { index: i, reason: '建议继续完成本轮' };
+                }
+            }
+            
+            return { index: 0, reason: '暂无推荐' };
+        }
+        
+        function findWeakestModule() {
+            let weakestIndex = 0;
+            let lowestAccuracy = 100;
+            
+            for (let i = 0; i < studyData.modules.length; i++) {
+                const stats = studyData.moduleStats[studyData.modules[i].id];
+                if (stats && stats.attempts > 0) {
+                    const accuracy = (stats.totalCorrect / stats.totalQuestions) * 100;
+                    if (accuracy < lowestAccuracy) {
+                        lowestAccuracy = accuracy;
+                        weakestIndex = i;
+                    }
+                }
+            }
+            
+            return { index: weakestIndex, reason: `最薄弱模块（正确率${lowestAccuracy.toFixed(1)}%）` };
+        }
+        
+        function updateRecommendation() {
+            currentRecommendation = findRecommendedModule();
+            
+            const suggestionEl = document.getElementById('coachSuggestion');
+            const detailEl = document.getElementById('recommendDetail');
+            
+            if (currentRecommendation.index >= 0) {
+                const module = studyData.modules[currentRecommendation.index];
+                
+                document.getElementById('coachMessage').innerHTML = `
+                    <div style="margin-bottom: 5px;">准备好开始今天的学习了吗？</div>
+                    <div style="font-size: 13px;">今日推荐：<strong>${module.name}</strong></div>
+                `;
+                
+                suggestionEl.style.display = 'block';
+                detailEl.textContent = currentRecommendation.reason;
+                
             } else {
-                // 优秀模块：可以适当减少，保持手感
-                return Math.max(15, module.questions - 5); // 至少15题
+                suggestionEl.style.display = 'none';
+                document.getElementById('coachMessage').textContent = '准备好开始今天的学习了吗？';
             }
         }
         
-        // 计算进步趋势
-        function calculateProgressTrend(moduleId) {
-            const stats = studyData.moduleStats[moduleId];
-            if (!stats || stats.history.length < 3) return null;
-            
-            const recent = stats.history.slice(-3);
-            const latestAccuracy = recent[2].accuracy;
-            const oldestAccuracy = recent[0].accuracy;
-            const trend = latestAccuracy - oldestAccuracy;
-            
-            return {
-                trend: trend,
-                direction: trend > 2 ? 'up' : (trend < -2 ? 'down' : 'stable'),
-                magnitude: Math.abs(trend)
-            };
+        function startRecommended() {
+            if (currentRecommendation.index >= 0) {
+                completeModule(currentRecommendation.index);
+            }
         }
         
         // ============================================
-        // 时间与日期处理
+        // 核心显示功能
         // ============================================
         
         function getTodayDate() {
-            const now = new Date();
-            return now.toISOString().split('T')[0]; // YYYY-MM-DD
+            return new Date().toISOString().split('T')[0];
         }
         
         function getYesterdayDate() {
@@ -1943,86 +1772,39 @@
             return yesterday.toISOString().split('T')[0];
         }
         
-        function formatTime(minutes) {
-            if (minutes < 60) {
-                return `${minutes}分钟`;
-            } else {
-                const hours = Math.floor(minutes / 60);
-                const mins = minutes % 60;
-                return mins > 0 ? `${hours}小时${mins}分钟` : `${hours}小时`;
-            }
-        }
-        
-        // 检查是否新的一天
         function checkNewDay() {
             const today = getTodayDate();
             
             if (studyData.currentDate !== today) {
-                console.log('📅 新的一天开始');
-                
-                // 保存前一天的历史记录
-                if (studyData.daily.date && studyData.daily.sessions.length > 0) {
-                    studyData.history.push({
-                        date: studyData.daily.date,
-                        sessions: [...studyData.daily.sessions],
-                        totalTime: studyData.daily.totalTime,
-                        completed: studyData.daily.completed.length
-                    });
-                    
-                    // 只保留最近60天的历史
-                    if (studyData.history.length > 60) {
-                        studyData.history.shift();
-                    }
-                }
-                
-                // 检查连续学习
                 const yesterday = getYesterdayDate();
                 if (studyData.overall.lastStudyDate === yesterday) {
                     studyData.overall.streakDays++;
-                    
-                    // 检查连续学习成就
-                    checkStreakAchievements();
                 } else if (studyData.overall.lastStudyDate !== today) {
                     studyData.overall.streakDays = 1;
                 }
                 
-                // 更新日期相关数据
                 studyData.currentDate = today;
                 studyData.overall.lastStudyDate = today;
                 studyData.overall.totalDays++;
                 
-                // 新的一天：不重置进度，只更新日期
                 studyData.daily.date = today;
                 studyData.daily.startTime = Date.now();
-                studyData.daily.sessions = []; // 重置今日练习记录
+                studyData.daily.sessions = [];
                 
-                // 智能推荐下一个模块
-                studyData.currentModuleIndex = findRecommendedModule();
-                
-                // 更新教练消息
-                updateCoachMessage('newDay');
-                
+                updateRecommendation();
                 saveData();
             }
         }
         
-        // ============================================
-        // 界面更新函数
-        // ============================================
-        
-        // 更新显示
         function updateDisplay() {
             updateStatusBar();
             updateProgressBar();
             updateModuleList();
             updateAnalyticsPanel();
-            updateCoachMessage();
-            
-            // 自动保存
+            updateRecommendation();
             saveData();
         }
         
-        // 更新状态栏
         function updateStatusBar() {
             document.getElementById('currentRound').textContent = studyData.currentRound;
             
@@ -2032,13 +1814,11 @@
             
             document.getElementById('totalQuestions').textContent = studyData.overall.totalQuestions;
             
-            // 计算加权正确率
             const accuracy = studyData.overall.totalQuestions > 0 ? 
                 ((studyData.overall.totalCorrect / studyData.overall.totalQuestions) * 100).toFixed(1) : 0;
             document.getElementById('accuracyRate').textContent = `${accuracy}%`;
         }
         
-        // 更新进度条
         function updateProgressBar() {
             const completedCount = studyData.daily.completed.length;
             const totalCount = studyData.modules.length;
@@ -2050,12 +1830,10 @@
             document.getElementById('progressBar').style.width = `${progressPercent}%`;
         }
         
-        // 更新模块列表
         function updateModuleList() {
             const container = document.getElementById('modulesContainer');
             container.innerHTML = '';
             
-            // 获取当前过滤状态
             const filter = document.querySelector('.filter-btn.active')?.getAttribute('onclick')?.match(/'([^']+)'/)?.[1] || 'all';
             
             studyData.modules.forEach((module, index) => {
@@ -2067,12 +1845,10 @@
                 };
                 
                 const isCompleted = studyData.daily.completed.includes(module.id);
-                const isRecommended = index === studyData.currentModuleIndex && !isCompleted;
-                const accuracy = stats.attempts > 0 ? (stats.totalCorrect / stats.totalQuestions) * 100 : 0;
+                const isRecommended = currentRecommendation.index === index;
+                const accuracy = stats.attempts > 0 ? (stats.totalCorrect / stats.totalQuestions * 100) : 0;
                 const isWeak = stats.attempts > 0 && accuracy < 65;
-                const progressTrend = calculateProgressTrend(module.id);
                 
-                // 应用过滤
                 let showModule = true;
                 switch(filter) {
                     case 'weak':
@@ -2091,7 +1867,6 @@
                 const moduleDiv = document.createElement('div');
                 moduleDiv.className = `module-item ${isCompleted ? 'completed' : ''} ${isRecommended ? 'recommended' : ''} ${isWeak ? 'weak' : ''}`;
                 
-                // 状态文本
                 let statusText = '待完成';
                 let statusClass = 'pending';
                 
@@ -2106,22 +1881,11 @@
                     statusClass = 'weak';
                 }
                 
-                // 趋势指示器
-                let trendIndicator = '';
-                if (progressTrend) {
-                    if (progressTrend.direction === 'up') {
-                        trendIndicator = `<span class="badge badge-growth">↑${progressTrend.magnitude.toFixed(1)}%</span>`;
-                    } else if (progressTrend.direction === 'down') {
-                        trendIndicator = `<span class="badge badge-fire">↓${progressTrend.magnitude.toFixed(1)}%</span>`;
-                    }
-                }
-                
-                // 构建模块HTML（修复：所有模块都有练习按钮）
                 moduleDiv.innerHTML = `
                     <div class="module-number">${index + 1}</div>
                     <div class="module-content">
                         <div class="module-header">
-                            <div class="module-title">${module.name} ${trendIndicator}</div>
+                            <div class="module-title">${module.name}</div>
                             <div class="module-status ${statusClass}">${statusText}</div>
                         </div>
                         <div class="module-meta">
@@ -2140,26 +1904,13 @@
                                     <span>📊</span>
                                     练习：${stats.attempts}次
                                 </div>
-                                <div class="stat-badge">
-                                    <span>📝</span>
-                                    平均：${stats.avgQuestions ? stats.avgQuestions.toFixed(0) : module.questions}题/次
-                                </div>
                             </div>
-                            
-                            ${progressTrend ? `
-                                <div class="module-insights">
-                                    ${progressTrend.direction === 'up' ? '📈 最近进步明显，继续保持！' : 
-                                      progressTrend.direction === 'down' ? '📉 最近有所下滑，需要关注！' : 
-                                      '➡️ 表现稳定，继续巩固！'}
-                                </div>
-                            ` : ''}
                         ` : `
-                            <div class="module-insights">
+                            <div style="font-size: 12px; color: #636e72; padding: 8px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid #3498db;">
                                 🔍 新模块，建议先完成一次练习建立基准
                             </div>
                         `}
                         
-                        <!-- 修复：所有模块都有练习按钮 -->
                         <div class="module-actions">
                             <button class="btn btn-complete" onclick="completeModule(${index})" data-module-index="${index}">
                                 <span>${isCompleted ? '🔄' : '✅'}</span>
@@ -2176,33 +1927,25 @@
                 container.appendChild(moduleDiv);
             });
             
-            // 如果没有模块显示
             if (container.children.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align: center; padding: 30px; color: #a0aec0;">
+                    <div style="text-align: center; padding: 40px; color: #a0aec0;">
                         <div style="font-size: 40px; margin-bottom: 15px;">📭</div>
-                        <div style="font-size: 15px; margin-bottom: 8px;">没有找到符合条件的模块</div>
-                        <div style="font-size: 13px; color: #cbd5e0;">试试切换筛选条件</div>
+                        <div style="font-size: 15px;">没有符合条件的模块</div>
                     </div>
                 `;
             }
         }
         
-        // 过滤模块
         function filterModules(filterType) {
-            // 更新按钮状态
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
-            
-            // 更新模块列表
             updateModuleList();
         }
         
-        // 更新分析面板
         function updateAnalyticsPanel() {
-            // 仪表盘数据
             document.getElementById('statTotalRounds').textContent = studyData.totalRounds;
             document.getElementById('statStreakDays').textContent = studyData.overall.streakDays;
             
@@ -2214,19 +1957,14 @@
                 Math.round(studyData.overall.totalQuestions / studyData.overall.totalSessions) : 0;
             document.getElementById('statAvgQuestions').textContent = avgQuestions;
             
-            // 薄弱模块列表
             updateWeakModulesList();
-            
-            // 今日建议
             updateDailyTips();
         }
         
-        // 更新薄弱模块列表
         function updateWeakModulesList() {
             const container = document.getElementById('weakModulesList');
             container.innerHTML = '';
             
-            // 找出正确率低于65%的模块
             const weakModules = studyData.modules
                 .map(module => {
                     const stats = studyData.moduleStats[module.id];
@@ -2236,15 +1974,14 @@
                     if (accuracy < 65) {
                         return {
                             module: module,
-                            accuracy: accuracy,
-                            attempts: stats.attempts
+                            accuracy: accuracy
                         };
                     }
                     return null;
                 })
                 .filter(item => item !== null)
-                .sort((a, b) => a.accuracy - b.accuracy) // 按正确率从低到高排序
-                .slice(0, 5); // 最多显示5个
+                .sort((a, b) => a.accuracy - b.accuracy)
+                .slice(0, 3);
             
             if (weakModules.length === 0) {
                 container.innerHTML = `
@@ -2260,89 +1997,61 @@
                 const li = document.createElement('li');
                 li.className = 'weak-module-item';
                 
-                let accuracyClass = 'accuracy-low';
-                let accuracyText = '需重点突破';
-                
-                if (item.accuracy < 50) {
-                    accuracyText = '严重薄弱';
-                } else if (item.accuracy < 60) {
-                    accuracyText = '比较薄弱';
-                } else {
-                    accuracyText = '需要加强';
-                }
-                
                 li.innerHTML = `
                     <div class="weak-module-name">${item.module.name}</div>
                     <div>
                         <span class="weak-module-accuracy">${item.accuracy.toFixed(1)}%</span>
-                        <span class="accuracy-badge ${accuracyClass}">${accuracyText}</span>
+                        <span class="accuracy-badge accuracy-low">需加强</span>
                     </div>
                 `;
                 container.appendChild(li);
             });
         }
         
-        // 更新今日建议
         function updateDailyTips() {
             const container = document.getElementById('dailyTips');
+            container.innerHTML = '';
+            
             const tips = [];
             
-            // 1. 检查薄弱模块
-            const weakModules = studyData.modules.filter(module => {
+            let weakCount = 0;
+            studyData.modules.forEach(module => {
                 const stats = studyData.moduleStats[module.id];
-                if (!stats || stats.attempts === 0) return false;
-                const accuracy = (stats.totalCorrect / stats.totalQuestions) * 100;
-                return accuracy < 65;
+                if (stats && stats.attempts > 0) {
+                    const accuracy = (stats.totalCorrect / stats.totalQuestions) * 100;
+                    if (accuracy < 65) weakCount++;
+                }
             });
             
-            if (weakModules.length > 0) {
+            if (weakCount > 0) {
                 tips.push({
                     icon: '⚠️',
-                    text: `发现${weakModules.length}个薄弱模块，建议今天重点练习`
+                    text: `发现${weakCount}个薄弱模块，建议重点练习`
                 });
             }
             
-            // 2. 检查连续学习
-            if (studyData.overall.streakDays >= 7) {
+            if (studyData.overall.streakDays >= 3) {
                 tips.push({
                     icon: '🔥',
                     text: `已连续学习${studyData.overall.streakDays}天，继续保持！`
                 });
             }
             
-            // 3. 检查练习频率
-            const today = new Date().toISOString().split('T')[0];
-            const todaySessions = studyData.daily.sessions.length;
+            const completed = studyData.daily.completed.length;
+            const total = studyData.modules.length;
             
-            if (todaySessions === 0) {
+            if (completed === 0) {
                 tips.push({
                     icon: '🎯',
                     text: '今天尚未开始学习，建议至少完成1个模块'
                 });
-            } else if (todaySessions < 3) {
+            } else if (completed < total) {
                 tips.push({
                     icon: '⚡',
-                    text: `今天已完成${todaySessions}次练习，建议再完成${3 - todaySessions}个模块`
+                    text: `已完成${completed}/${total}，继续加油！`
                 });
             }
             
-            // 4. 检查平均正确率
-            const avgAccuracy = studyData.overall.totalQuestions > 0 ? 
-                (studyData.overall.totalCorrect / studyData.overall.totalQuestions * 100) : 0;
-            
-            if (avgAccuracy > 80) {
-                tips.push({
-                    icon: '💎',
-                    text: `当前平均正确率${avgAccuracy.toFixed(1)}%，表现优秀！`
-                });
-            } else if (avgAccuracy < 70) {
-                tips.push({
-                    icon: '📉',
-                    text: `当前平均正确率${avgAccuracy.toFixed(1)}%，建议注重练习质量`
-                });
-            }
-            
-            // 如果没有建议，显示默认提示
             if (tips.length === 0) {
                 tips.push(
                     { icon: '🎯', text: '系统会根据你的历史表现智能推荐练习模块' },
@@ -2351,8 +2060,6 @@
                 );
             }
             
-            // 更新DOM
-            container.innerHTML = '';
             tips.forEach(tip => {
                 const tipDiv = document.createElement('div');
                 tipDiv.className = 'tip-item';
@@ -2364,46 +2071,181 @@
             });
         }
         
-        // 更新教练消息
-        function updateCoachMessage(type = 'greeting') {
-            const container = document.getElementById('coachMessage');
-            let message = '';
+        // ============================================
+        // 自定义模块管理功能（核心！）
+        // ============================================
+        
+        function showEditModal() {
+            updateModuleEditList();
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        function updateModuleEditList() {
+            const container = document.getElementById('moduleEditList');
+            container.innerHTML = '';
             
-            const hour = new Date().getHours();
-            let timeOfDay = 'morning';
-            if (hour >= 12 && hour < 18) timeOfDay = 'afternoon';
-            if (hour >= 18) timeOfDay = 'evening';
+            studyData.modules.forEach((module, index) => {
+                const div = document.createElement('div');
+                div.className = 'module-edit-item';
+                div.innerHTML = `
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #2c3e50;">${module.name}</div>
+                        <div style="font-size: 12px; color: #718096;">
+                            ${module.category} · ${module.questions}题 · ${module.time}分钟
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="moveModule(${index}, -1)" ${index === 0 ? 'disabled' : ''}>
+                            ⬆️
+                        </button>
+                        <button onclick="moveModule(${index}, 1)" ${index === studyData.modules.length-1 ? 'disabled' : ''}>
+                            ⬇️
+                        </button>
+                        <button onclick="removeModule(${index})" class="delete-btn">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function moveModule(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= studyData.modules.length) return;
             
-            switch(type) {
-                case 'newDay':
-                    message = `新的一天开始！已连续学习${studyData.overall.streakDays}天，继续保持！`;
-                    break;
-                case 'progress':
-                    const completedCount = studyData.daily.completed.length;
-                    const totalCount = studyData.modules.length;
-                    const percent = Math.round((completedCount / totalCount) * 100);
-                    message = `当前进度${completedCount}/${totalCount} (${percent}%)，继续加油！`;
-                    break;
-                case 'achievement':
-                    // 这里可以添加成就触发时的消息
-                    break;
-                default:
-                    // 随机选择问候语
-                    const greetings = coachMessages.greetings;
-                    message = greetings[Math.floor(Math.random() * greetings.length)];
-                    
-                    // 替换变量
-                    message = message.replace('{streakDays}', studyData.overall.streakDays);
+            // 交换位置
+            [studyData.modules[index], studyData.modules[newIndex]] = 
+            [studyData.modules[newIndex], studyData.modules[index]];
+            
+            // 更新order
+            studyData.modules.forEach((module, i) => {
+                module.order = i + 1;
+            });
+            
+            updateModuleEditList();
+            updateDisplay();
+            saveData();
+        }
+        
+        function removeModule(index) {
+            if (!confirm(`确定删除模块"${studyData.modules[index].name}"吗？\n\n⚠️ 注意：该模块的历史统计数据也将被删除！`)) {
+                return;
             }
             
-            container.textContent = message;
+            const moduleId = studyData.modules[index].id;
+            
+            // 删除模块统计数据
+            delete studyData.moduleStats[moduleId];
+            
+            // 删除模块
+            studyData.modules.splice(index, 1);
+            
+            // 更新order
+            studyData.modules.forEach((module, i) => {
+                module.order = i + 1;
+            });
+            
+            // 如果删除的是当前模块，需要调整currentModuleIndex
+            if (index <= studyData.currentModuleIndex) {
+                studyData.currentModuleIndex = Math.max(0, studyData.currentModuleIndex - 1);
+            }
+            
+            // 从今日完成列表中移除（如果存在）
+            studyData.daily.completed = studyData.daily.completed.filter(id => id !== moduleId);
+            
+            updateModuleEditList();
+            updateDisplay();
+            saveData();
+            
+            showNotification("模块已删除", "学习模块已从列表中移除", "info");
+        }
+        
+        function showAddModuleModal() {
+            document.getElementById('newModuleName').value = '';
+            document.getElementById('newModuleCategory').value = '言语理解';
+            document.getElementById('newModuleTime').value = 30;
+            document.getElementById('newModuleQuestions').value = 20;
+            document.getElementById('newModuleDesc').value = '';
+            
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('addModuleModal').style.display = 'flex';
+            document.getElementById('newModuleName').focus();
+        }
+        
+        function closeAddModuleModal() {
+            document.getElementById('addModuleModal').style.display = 'none';
+            showEditModal();
+        }
+        
+        function addModule() {
+            const name = document.getElementById('newModuleName').value.trim();
+            const category = document.getElementById('newModuleCategory').value;
+            const time = parseInt(document.getElementById('newModuleTime').value);
+            const questions = parseInt(document.getElementById('newModuleQuestions').value);
+            const desc = document.getElementById('newModuleDesc').value.trim();
+            
+            if (!name) {
+                alert('请输入模块名称！');
+                return;
+            }
+            
+            if (isNaN(time) || time < 5) {
+                alert('请输入有效的时间（至少5分钟）！');
+                return;
+            }
+            
+            if (isNaN(questions) || questions < 1) {
+                alert('请输入有效的题量！');
+                return;
+            }
+            
+            const newModule = {
+                id: Date.now(), // 使用时间戳作为唯一ID
+                name: name,
+                category: category,
+                time: time,
+                questions: questions,
+                desc: desc || "请按要求完成练习",
+                order: studyData.modules.length + 1
+            };
+            
+            studyData.modules.push(newModule);
+            
+            // 初始化统计
+            studyData.moduleStats[newModule.id] = {
+                attempts: 0,
+                totalQuestions: 0,
+                totalCorrect: 0,
+                bestAccuracy: 0,
+                lastAccuracy: 0,
+                history: [],
+                lastPracticeDate: '',
+                streak: 0,
+                avgQuestions: questions
+            };
+            
+            closeAddModuleModal();
+            
+            showNotification("模块已添加", `新模块"${name}"已添加到学习列表`, "success");
+        }
+        
+        function saveModules() {
+            saveData();
+            closeEditModal();
+            updateDisplay();
+            
+            showNotification("设置已保存", "模块管理设置已更新", "success");
         }
         
         // ============================================
-        // 模块操作函数（修复重复练习）
+        // 核心练习功能
         // ============================================
         
-        // 完成模块 - 支持重复练习
         function completeModule(index) {
             const module = studyData.modules[index];
             currentModuleInfo = {
@@ -2417,96 +2259,71 @@
                 }
             };
             
-            // 检查是否是重复练习
             const isRepeated = studyData.daily.completed.includes(module.id);
             
-            // 智能建议题数
-            let recommendedQuestions = recommendQuestionCount(module.id);
-            
-            // 如果是重复练习，建议更多题数
-            if (isRepeated) {
-                recommendedQuestions = Math.min(50, recommendedQuestions + 10);
-            }
-            
-            // 设置弹窗标题
             document.getElementById('completeModuleTitle').textContent = `${isRepeated ? '再次练习：' : '完成：'}${module.name}`;
             document.getElementById('completeModuleSubtitle').textContent = isRepeated ? '重复练习巩固提升，可以调整题量重点突破' : module.desc;
             
-            // 设置智能建议
-            document.getElementById('recommendedQuestions').textContent = recommendedQuestions;
-            document.getElementById('questionsRange').value = recommendedQuestions;
-            document.getElementById('questionsSlider').value = recommendedQuestions;
-            document.getElementById('questionsInput').value = recommendedQuestions;
+            const recommendedQuestions = module.questions;
+            
+            // 设置初始值
+            const questionsInput = document.getElementById('questionsInput');
+            const questionsSlider = document.getElementById('questionsSlider');
+            const wrongInput = document.getElementById('wrongInput');
+            const wrongRange = document.getElementById('wrongRange');
+            
+            if (questionsInput) questionsInput.value = recommendedQuestions;
+            if (questionsSlider) questionsSlider.value = recommendedQuestions;
+            if (wrongInput) wrongInput.value = 0;
+            if (wrongRange) wrongRange.value = 0;
+            
             document.getElementById('currentQuestions').textContent = recommendedQuestions;
-            
-            // 设置错题数范围（基于建议题数）
-            const wrongMax = Math.min(50, Math.floor(recommendedQuestions * 1.5));
-            document.getElementById('wrongRange').max = wrongMax;
-            document.getElementById('wrongInput').max = wrongMax;
-            
-            // 重置错题数为0
-            document.getElementById('wrongRange').value = 0;
-            document.getElementById('wrongInput').value = 0;
             document.getElementById('wrongCountDisplay').textContent = '0';
             
-            // 更新实时反馈
             updateRealTimeFeedback();
             
-            // 显示弹窗
             document.getElementById('completeModal').style.display = 'flex';
-            document.getElementById('questionsInput').focus();
+            if (questionsInput) questionsInput.focus();
             
-            // 记录开始时间
             currentModuleInfo.startTime = Date.now();
             currentModuleInfo.isRepeated = isRepeated;
         }
         
-        // 更新实时反馈
         function updateRealTimeFeedback() {
             if (!currentModuleInfo) return;
             
-            const practiceQuestions = parseInt(document.getElementById('questionsInput').value) || 20;
-            const wrongCount = parseInt(document.getElementById('wrongInput').value) || 0;
+            const questionsInput = document.getElementById('questionsInput');
+            const wrongInput = document.getElementById('wrongInput');
             
-            // 计算本次正确率
+            if (!questionsInput || !wrongInput) return;
+            
+            const practiceQuestions = parseInt(questionsInput.value) || 20;
+            const wrongCount = parseInt(wrongInput.value) || 0;
+            
             const correctCount = Math.max(0, practiceQuestions - wrongCount);
             const accuracy = practiceQuestions > 0 ? (correctCount / practiceQuestions * 100).toFixed(1) : 0;
             
-            // 计算历史平均
             const stats = currentModuleInfo.stats;
-            const historyAccuracy = stats.attempts > 0 ? 
-                (stats.totalCorrect / stats.totalQuestions * 100).toFixed(1) : 0;
             
-            // 计算进步情况
-            let progressText = '-';
-            if (stats.history.length > 0) {
-                const lastAccuracy = stats.history[stats.history.length - 1].accuracy;
-                const progress = accuracy - lastAccuracy;
-                if (Math.abs(progress) > 0.1) {
-                    progressText = `${progress > 0 ? '+' : ''}${progress.toFixed(1)}%`;
-                }
-            }
-            
-            // 更新显示
             document.getElementById('accuracyDisplay').textContent = `${accuracy}%`;
             document.getElementById('totalQuestionsDisplay').textContent = stats.totalQuestions + practiceQuestions;
-            document.getElementById('avgAccuracyDisplay').textContent = `${historyAccuracy}%`;
-            document.getElementById('progressDisplay').textContent = progressText;
-            
-            // 更新当前题数显示
             document.getElementById('currentQuestions').textContent = practiceQuestions;
             document.getElementById('wrongCountDisplay').textContent = wrongCount;
         }
         
-        // 提交完成
         function submitComplete() {
             if (!currentModuleInfo) return;
             
-            const practiceQuestions = parseInt(document.getElementById('questionsInput').value);
-            const wrongCount = parseInt(document.getElementById('wrongInput').value);
-            const note = document.getElementById('noteInput').value.trim();
+            const questionsInput = document.getElementById('questionsInput');
+            const wrongInput = document.getElementById('wrongInput');
+            const noteInput = document.getElementById('noteInput');
             
-            // 验证输入
+            if (!questionsInput || !wrongInput || !noteInput) return;
+            
+            const practiceQuestions = parseInt(questionsInput.value);
+            const wrongCount = parseInt(wrongInput.value);
+            const note = noteInput.value.trim();
+            
             if (isNaN(practiceQuestions) || practiceQuestions < 1) {
                 alert('请输入有效的练习题数！');
                 return;
@@ -2521,7 +2338,6 @@
             const stats = currentModuleInfo.stats;
             const isRepeated = currentModuleInfo.isRepeated;
             
-            // 计算本次练习数据
             const correctCount = practiceQuestions - wrongCount;
             const accuracy = (correctCount / practiceQuestions) * 100;
             const practiceTime = currentModuleInfo.startTime ? Math.round((Date.now() - currentModuleInfo.startTime) / 60000) : module.time;
@@ -2530,12 +2346,10 @@
             stats.attempts++;
             stats.totalQuestions += practiceQuestions;
             stats.totalCorrect += correctCount;
-            stats.lastAccuracy = stats.bestAccuracy;
             stats.bestAccuracy = Math.max(stats.bestAccuracy, accuracy);
             stats.lastPracticeDate = new Date().toISOString();
             stats.avgQuestions = stats.totalQuestions / stats.attempts;
             
-            // 记录历史
             stats.history.push({
                 date: studyData.currentDate,
                 timestamp: Date.now(),
@@ -2573,10 +2387,6 @@
                 studyData.todayCompleted++;
             }
             
-            // 检查成就
-            checkAchievements();
-            
-            // 教练反馈
             let coachMessage = '';
             if (accuracy >= 90) {
                 coachMessage = `💎 完美！${module.name}正确率${accuracy.toFixed(1)}%，太强了！`;
@@ -2588,135 +2398,41 @@
                 coachMessage = `📝 ${module.name}完成，正确率${accuracy.toFixed(1)}%，需要加强练习！`;
             }
             
-            // 如果是重复练习，添加提示
             if (isRepeated) {
                 coachMessage = `🔄 重复练习完成！${coachMessage}`;
             }
             
-            updateCoachMessage();
             showNotification("练习完成", coachMessage, accuracy >= 80 ? "success" : "info");
             
             // 检查是否完成一轮
             if (studyData.daily.completed.length >= studyData.modules.length) {
-                // 完成一轮！
                 studyData.currentRound++;
                 studyData.totalRounds++;
                 
-                // 重置所有模块，开始新一轮
                 studyData.daily.completed = [];
-                studyData.currentModuleIndex = findRecommendedModule();
                 studyData.todayCompleted = 0;
                 studyData.daily.totalTime = 0;
                 studyData.daily.sessions = [];
                 
                 showNotification("🎉 恭喜！", `完成第${studyData.currentRound-1}轮学习，开始第${studyData.currentRound}轮！`, "success");
-                updateCoachMessage('newRound');
-            } else {
-                // 智能推荐下一个模块
-                studyData.currentModuleIndex = findRecommendedModule();
             }
             
             closeCompleteModal();
             updateDisplay();
             
-            // 重置当前模块信息
             currentModuleInfo = null;
         }
-        
-        // ============================================
-        // 成就系统
-        // ============================================
-        
-        function checkAchievements() {
-            const newAchievements = [];
-            
-            // 检查总题数成就
-            studyData.achievements.totalQuestionsMilestones.forEach(milestone => {
-                if (studyData.overall.totalQuestions >= milestone && 
-                    !studyData.achievements.completed.includes(`questions_${milestone}`)) {
-                    newAchievements.push({
-                        type: 'questions',
-                        milestone: milestone,
-                        message: `🎉 完成${milestone}题里程碑！`
-                    });
-                    studyData.achievements.completed.push(`questions_${milestone}`);
-                }
-            });
-            
-            // 检查连续学习成就
-            studyData.achievements.streakMilestones.forEach(milestone => {
-                if (studyData.overall.streakDays >= milestone && 
-                    !studyData.achievements.completed.includes(`streak_${milestone}`)) {
-                    newAchievements.push({
-                        type: 'streak',
-                        milestone: milestone,
-                        message: `🔥 连续学习${milestone}天成就达成！`
-                    });
-                    studyData.achievements.completed.push(`streak_${milestone}`);
-                }
-            });
-            
-            // 显示新成就
-            newAchievements.forEach(achievement => {
-                setTimeout(() => {
-                    showNotification("🎖️ 新成就达成", achievement.message, "success");
-                }, 500);
-            });
-        }
-        
-        function checkStreakAchievements() {
-            studyData.achievements.streakMilestones.forEach(milestone => {
-                if (studyData.overall.streakDays === milestone && 
-                    !studyData.achievements.completed.includes(`streak_${milestone}`)) {
-                    showNotification("🎖️ 新成就达成", `🔥 连续学习${milestone}天！`, "success");
-                    studyData.achievements.completed.push(`streak_${milestone}`);
-                }
-            });
-        }
-        
-        // ============================================
-        // 弹窗控制函数
-        // ============================================
         
         function closeCompleteModal() {
             document.getElementById('completeModal').style.display = 'none';
-            document.getElementById('noteInput').value = '';
+            const noteInput = document.getElementById('noteInput');
+            if (noteInput) noteInput.value = '';
             currentModuleInfo = null;
         }
         
-        function showStatsModal() {
-            generateStatsReport();
-            document.getElementById('statsModal').style.display = 'flex';
-        }
-        
-        function closeStatsModal() {
-            document.getElementById('statsModal').style.display = 'none';
-        }
-        
-        function showEditModal() {
-            updateModuleEditList();
-            document.getElementById('editModal').style.display = 'flex';
-        }
-        
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-        
-        function showAddModuleModal() {
-            document.getElementById('newModuleName').value = '';
-            document.getElementById('newModuleTime').value = 30;
-            document.getElementById('newModuleQuestions').value = 20;
-            document.getElementById('newModuleDesc').value = '';
-            
-            document.getElementById('editModal').style.display = 'none';
-            document.getElementById('addModuleModal').style.display = 'flex';
-            document.getElementById('newModuleName').focus();
-        }
-        
-        function closeAddModuleModal() {
-            document.getElementById('addModuleModal').style.display = 'none';
-            showEditModal();
-        }
+        // ============================================
+        // 其他功能
+        // ============================================
         
         function showResetModal() {
             document.getElementById('resetModal').style.display = 'flex';
@@ -2724,6 +2440,20 @@
         
         function closeResetModal() {
             document.getElementById('resetModal').style.display = 'none';
+        }
+        
+        function resetToday() {
+            if (confirm('确定重置当前轮次进度吗？所有已完成的模块将被标记为未完成，本轮重新开始。')) {
+                studyData.todayCompleted = 0;
+                studyData.currentModuleIndex = 0;
+                studyData.daily.completed = [];
+                studyData.daily.totalTime = 0;
+                studyData.daily.sessions = [];
+                
+                closeResetModal();
+                updateDisplay();
+                showNotification("重置完成", "当前轮次已重置，可以重新开始学习", "info");
+            }
         }
         
         function showClearAllModal() {
@@ -2736,93 +2466,52 @@
             document.getElementById('clearAllModal').style.display = 'none';
         }
         
-        // ============================================
-        // 数据管理函数
-        // ============================================
-        
-        function resetToday() {
-            if (!confirm('确定重置当前轮次进度吗？所有已完成的模块将被标记为未完成，本轮重新开始。')) return;
-            
-            studyData.todayCompleted = 0;
-            studyData.currentModuleIndex = findRecommendedModule();
-            studyData.daily.completed = [];
-            studyData.daily.totalTime = 0;
-            studyData.daily.sessions = [];
-            
-            closeResetModal();
-            updateDisplay();
-            
-            showNotification("重置完成", "当前轮次已重置，可以重新开始学习", "info");
-            updateCoachMessage('reset');
-        }
-        
         function clearAllData() {
-            if (!confirm('最后确认：这将清空所有数据，无法恢复！')) return;
-            
-            // 清空所有数据
-            studyData.currentDate = getTodayDate();
-            studyData.currentRound = 1;
-            studyData.currentModuleIndex = 0;
-            studyData.todayCompleted = 0;
-            studyData.totalRounds = 0;
-            
-            studyData.overall = {
-                totalQuestions: 0,
-                totalCorrect: 0,
-                streakDays: 1,
-                totalDays: 1,
-                lastStudyDate: getTodayDate(),
-                totalTime: 0,
-                totalSessions: 0,
-                avgQuestionsPerSession: 0
-            };
-            
-            studyData.moduleStats = {};
-            
-            studyData.daily = {
-                date: getTodayDate(),
-                completed: [],
-                startTime: Date.now(),
-                totalTime: 0,
-                sessions: []
-            };
-            
-            studyData.history = [];
-            studyData.achievements.completed = [];
-            
-            // 重置为默认模块
-            studyData.modules = [
-                { id: 1, name: "言语片段阅读", category: "言语理解", time: 30, questions: 20, desc: "每题≤10字写核心论点", order: 1 },
-                { id: 2, name: "逻辑判断", category: "判断推理", time: 35, questions: 20, desc: "写论证类型+逻辑链", order: 2 },
-                { id: 3, name: "资料分析", category: "资料分析", time: 35, questions: 20, desc: "口述最难计算思路", order: 3 },
-                { id: 4, name: "言语填空", category: "言语理解", time: 30, questions: 20, desc: "记录犹豫选项并辨析", order: 4 },
-                { id: 5, name: "图形推理", category: "判断推理", time: 25, questions: 20, desc: "注错/慢题'死在何步'", order: 5 },
-                { id: 6, name: "定义判断", category: "判断推理", time: 25, questions: 20, desc: "先自话重述定义", order: 6 },
-                { id: 7, name: "类比推理", category: "判断推理", time: 20, questions: 20, desc: "错题反向构造例子", order: 7 },
-                { id: 8, name: "终极任务", category: "综合训练", time: 60, questions: 1, desc: "申论/错杀/体能三选一", order: 8 }
-            ];
-            
-            // 初始化默认模块的统计
-            studyData.modules.forEach(module => {
-                studyData.moduleStats[module.id] = {
-                    attempts: 0,
+            if (confirm('最后确认：这将清空所有学习数据，无法恢复！')) {
+                studyData.currentDate = getTodayDate();
+                studyData.currentRound = 1;
+                studyData.currentModuleIndex = 0;
+                studyData.todayCompleted = 0;
+                studyData.totalRounds = 0;
+                
+                studyData.overall = {
                     totalQuestions: 0,
                     totalCorrect: 0,
-                    bestAccuracy: 0,
-                    lastAccuracy: 0,
-                    history: [],
-                    lastPracticeDate: '',
-                    streak: 0,
-                    avgQuestions: module.questions
+                    streakDays: 1,
+                    totalDays: 1,
+                    lastStudyDate: getTodayDate(),
+                    totalTime: 0,
+                    totalSessions: 0,
+                    avgQuestionsPerSession: 0
                 };
-            });
-            
-            closeClearAllModal();
-            saveData();
-            updateDisplay();
-            
-            showNotification("数据已清空", "所有学习数据已重置，重新开始学习之旅", "info");
-            updateCoachMessage('resetAll');
+                
+                studyData.moduleStats = {};
+                
+                studyData.daily = {
+                    date: getTodayDate(),
+                    completed: [],
+                    startTime: Date.now(),
+                    totalTime: 0,
+                    sessions: []
+                };
+                
+                studyData.modules = [
+                    { id: 1, name: "言语片段阅读", category: "言语理解", time: 30, questions: 20, desc: "每题≤10字写核心论点", order: 1 },
+                    { id: 2, name: "逻辑判断", category: "判断推理", time: 35, questions: 20, desc: "写论证类型+逻辑链", order: 2 },
+                    { id: 3, name: "资料分析", category: "资料分析", time: 35, questions: 20, desc: "口述最难计算思路", order: 3 },
+                    { id: 4, name: "言语填空", category: "言语理解", time: 30, questions: 20, desc: "记录犹豫选项并辨析", order: 4 },
+                    { id: 5, name: "图形推理", category: "判断推理", time: 25, questions: 20, desc: "注错/慢题'死在何步'", order: 5 },
+                    { id: 6, name: "定义判断", category: "判断推理", time: 25, questions: 20, desc: "先自话重述定义", order: 6 },
+                    { id: 7, name: "类比推理", category: "判断推理", time: 20, questions: 20, desc: "错题反向构造例子", order: 7 },
+                    { id: 8, name: "终极任务", category: "综合训练", time: 60, questions: 1, desc: "申论/错杀/体能三选一", order: 8 }
+                ];
+                
+                closeClearAllModal();
+                saveData();
+                updateDisplay();
+                
+                showNotification("数据已清空", "所有学习数据已重置", "info");
+            }
         }
         
         function exportData() {
@@ -2832,25 +2521,80 @@
             
             const a = document.createElement('a');
             a.href = url;
-            a.download = `公考学习数据_${getTodayDate()}_v2.1.json`;
+            a.download = `公考学习数据_${getTodayDate()}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             
             setTimeout(() => URL.revokeObjectURL(url), 100);
-            
             showNotification("导出成功", "学习数据已导出为JSON文件", "success");
         }
         
+        function showStatsModal() {
+            const statsContent = document.getElementById('statsContent');
+            statsContent.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">总学习轮次</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.totalRounds}</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">连续学习天数</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.overall.streakDays}</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">总练习题数</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.overall.totalQuestions}</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">平均正确率</div>
+                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.overall.totalQuestions > 0 ? ((studyData.overall.totalCorrect / studyData.overall.totalQuestions) * 100).toFixed(1) : 0}%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">📈 模块表现排行</div>
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        ${studyData.modules.map((module, index) => {
+                            const stats = studyData.moduleStats[module.id];
+                            if (!stats || stats.attempts === 0) return '';
+                            const accuracy = (stats.totalCorrect / stats.totalQuestions * 100).toFixed(1);
+                            return `
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f4f8;">
+                                    <div style="font-size: 13px;">${module.name}</div>
+                                    <div>
+                                        <span style="font-weight: 700; color: ${accuracy >= 80 ? '#27ae60' : accuracy >= 70 ? '#f39c12' : '#e74c3c'}">${accuracy}%</span>
+                                        <span style="font-size: 11px; color: #718096; margin-left: 8px;">${stats.attempts}次</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('statsModal').style.display = 'flex';
+        }
+        
+        function closeStatsModal() {
+            document.getElementById('statsModal').style.display = 'none';
+        }
+        
+        function showNotification(title, message, type = 'info') {
+            console.log(`📢 ${title}: ${message}`);
+        }
+        
         // ============================================
-        // 事件监听器设置
+        // 事件监听器
         // ============================================
         
         function setupEventListeners() {
-            // 题数滑块和输入框同步
+            // 同步滑块和输入框
             const questionsSlider = document.getElementById('questionsSlider');
             const questionsInput = document.getElementById('questionsInput');
-            const questionsRange = document.getElementById('questionsRange');
+            const wrongRange = document.getElementById('wrongRange');
+            const wrongInput = document.getElementById('wrongInput');
             
             if (questionsSlider && questionsInput) {
                 questionsSlider.addEventListener('input', function() {
@@ -2862,18 +2606,7 @@
                     questionsSlider.value = this.value;
                     updateRealTimeFeedback();
                 });
-                
-                questionsRange.addEventListener('input', function() {
-                    const value = this.value;
-                    questionsSlider.value = value;
-                    questionsInput.value = value;
-                    updateRealTimeFeedback();
-                });
             }
-            
-            // 错题数滑块和输入框同步
-            const wrongRange = document.getElementById('wrongRange');
-            const wrongInput = document.getElementById('wrongInput');
             
             if (wrongRange && wrongInput) {
                 wrongRange.addEventListener('input', function() {
@@ -2897,345 +2630,50 @@
                 });
             }
             
-            // 自动更新教练消息（每30分钟）
-            setInterval(() => {
-                updateCoachMessage();
-            }, 30 * 60 * 1000);
-            
-            // 检查长时间无操作（每10分钟）
-            let lastActivity = Date.now();
-            const activityEvents = ['click', 'touchstart', 'keydown', 'mousemove', 'scroll'];
-            
-            activityEvents.forEach(event => {
-                document.addEventListener(event, () => {
-                    lastActivity = Date.now();
-                });
-            });
-            
-            setInterval(() => {
-                if (Date.now() - lastActivity > 30 * 60 * 1000) {
-                    const completedCount = studyData.daily.completed.length;
-                    if (completedCount < studyData.modules.length) {
-                        showNotification("⏰ 学习提醒", "检测到长时间无操作，快回来继续学习吧！", "warning");
-                        lastActivity = Date.now();
-                    }
-                }
-            }, 10 * 60 * 1000);
-        }
-        
-        // ============================================
-        // 其他功能函数
-        // ============================================
-        
-        function updateModuleEditList() {
-            const container = document.getElementById('moduleEditList');
-            container.innerHTML = '';
-            
-            studyData.modules.forEach((module, index) => {
-                const div = document.createElement('div');
-                div.className = 'module-edit-item';
-                div.innerHTML = `
-                    <div>
-                        <div style="font-weight: 600; margin-bottom: 5px;">${module.name}</div>
-                        <div style="font-size: 12px; color: #718096;">
-                            ${module.category} · ${module.questions}题 · ${module.time}分钟
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button onclick="moveModule(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
-                            ⬆️
-                        </button>
-                        <button onclick="moveModule(${index}, 1)" ${index === studyData.modules.length-1 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
-                            ⬇️
-                        </button>
-                        <button onclick="removeModule(${index})" style="background: none; border: 1px solid #fed7d7; color: #e53e3e; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
-                            🗑️
-                        </button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-        
-        function moveModule(index, direction) {
-            const newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= studyData.modules.length) return;
-            
-            // 交换位置
-            [studyData.modules[index], studyData.modules[newIndex]] = 
-            [studyData.modules[newIndex], studyData.modules[index]];
-            
-            // 更新order
-            studyData.modules.forEach((module, i) => {
-                module.order = i + 1;
-            });
-            
-            updateModuleEditList();
-            updateDisplay();
-        }
-        
-        function removeModule(index) {
-            if (!confirm(`确定删除模块"${studyData.modules[index].name}"吗？此操作不可恢复。`)) return;
-            
-            const moduleId = studyData.modules[index].id;
-            
-            // 删除模块统计数据
-            delete studyData.moduleStats[moduleId];
-            
-            // 删除模块
-            studyData.modules.splice(index, 1);
-            
-            // 更新order
-            studyData.modules.forEach((module, i) => {
-                module.order = i + 1;
-            });
-            
-            // 如果删除的是当前模块，需要调整currentModuleIndex
-            if (index <= studyData.currentModuleIndex) {
-                studyData.currentModuleIndex = Math.max(0, studyData.currentModuleIndex - 1);
-            }
-            
-            updateModuleEditList();
-            updateDisplay();
-            
-            showNotification("模块已删除", "学习模块已从列表中移除", "info");
-        }
-        
-        function addModule() {
-            const name = document.getElementById('newModuleName').value.trim();
-            const category = document.getElementById('newModuleCategory').value;
-            const time = parseInt(document.getElementById('newModuleTime').value);
-            const questions = parseInt(document.getElementById('newModuleQuestions').value);
-            const desc = document.getElementById('newModuleDesc').value.trim();
-            
-            if (!name) {
-                alert('请输入模块名称！');
-                return;
-            }
-            
-            if (isNaN(time) || time < 5) {
-                alert('请输入有效的时间（至少5分钟）！');
-                return;
-            }
-            
-            if (isNaN(questions) || questions < 1) {
-                alert('请输入有效的题量！');
-                return;
-            }
-            
-            const newModule = {
-                id: Date.now(),
-                name: name,
-                category: category,
-                time: time,
-                questions: questions,
-                desc: desc || "请按要求完成练习",
-                order: studyData.modules.length + 1
-            };
-            
-            studyData.modules.push(newModule);
-            
-            // 初始化统计
-            studyData.moduleStats[newModule.id] = {
-                attempts: 0,
-                totalQuestions: 0,
-                totalCorrect: 0,
-                bestAccuracy: 0,
-                lastAccuracy: 0,
-                history: [],
-                lastPracticeDate: '',
-                streak: 0,
-                avgQuestions: questions
-            };
-            
-            closeAddModuleModal();
-            showEditModal();
-            
-            showNotification("模块已添加", `新模块"${name}"已添加到学习列表`, "success");
-        }
-        
-        function saveModules() {
-            saveData();
-            closeEditModal();
-            updateDisplay();
-            
-            showNotification("设置已保存", "模块管理设置已更新", "success");
-        }
-        
-        function generateStatsReport() {
-            const container = document.getElementById('statsContent');
-            
-            // 计算统计数据
-            const totalModules = studyData.modules.length;
-            const completedToday = studyData.daily.completed.length;
-            const totalQuestions = studyData.overall.totalQuestions;
-            const totalCorrect = studyData.overall.totalCorrect;
-            const overallAccuracy = totalQuestions > 0 ? (totalCorrect / totalQuestions * 100).toFixed(1) : 0;
-            const totalTime = formatTime(studyData.overall.totalTime);
-            const avgQuestionsPerSession = studyData.overall.avgQuestionsPerSession.toFixed(1);
-            
-            // 找出最佳和最差模块
-            let bestModule = null;
-            let worstModule = null;
-            let bestAccuracy = 0;
-            let worstAccuracy = 100;
-            
-            studyData.modules.forEach(module => {
-                const stats = studyData.moduleStats[module.id];
-                if (stats && stats.attempts > 0) {
-                    const accuracy = (stats.totalCorrect / stats.totalQuestions) * 100;
-                    if (accuracy > bestAccuracy) {
-                        bestAccuracy = accuracy;
-                        bestModule = module;
-                    }
-                    if (accuracy < worstAccuracy) {
-                        worstAccuracy = accuracy;
-                        worstModule = module;
-                    }
+            // 全局输入监听
+            document.addEventListener('input', function(e) {
+                if (e.target.id === 'questionsInput' || e.target.id === 'questionsSlider' || 
+                    e.target.id === 'wrongInput' || e.target.id === 'wrongRange') {
+                    updateRealTimeFeedback();
                 }
             });
-            
-            // 生成报告HTML
-            let reportHTML = `
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">📊 学习概览</div>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">总学习轮次</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.totalRounds}</div>
-                        </div>
-                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">连续学习天数</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${studyData.overall.streakDays}</div>
-                        </div>
-                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">总练习题数</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${totalQuestions}</div>
-                        </div>
-                        <div style="background: #f7fafc; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">平均正确率</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #2d3748;">${overallAccuracy}%</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">📈 模块表现分析</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div style="background: #f0fff4; padding: 12px; border-radius: 8px; border-left: 4px solid #38a169;">
-                            <div style="font-size: 13px; color: #276749; margin-bottom: 6px;">🏆 最佳表现模块</div>
-                            <div style="font-size: 16px; font-weight: 700; color: #276749; margin-bottom: 4px;">${bestModule ? bestModule.name : '暂无数据'}</div>
-                            <div style="font-size: 13px; color: #2d3748;">正确率：${bestModule ? bestAccuracy.toFixed(1) : 0}%</div>
-                        </div>
-                        <div style="background: #fff5f5; padding: 12px; border-radius: 8px; border-left: 4px solid #e53e3e;">
-                            <div style="font-size: 13px; color: #c53030; margin-bottom: 6px;">⚠️ 最需提高模块</div>
-                            <div style="font-size: 16px; font-weight: 700; color: #c53030; margin-bottom: 4px;">${worstModule ? worstModule.name : '暂无数据'}</div>
-                            <div style="font-size: 13px; color: #2d3748;">正确率：${worstModule ? worstAccuracy.toFixed(1) : 0}%</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">🎯 学习效率分析</div>
-                    <div style="background: #f7fafc; padding: 15px; border-radius: 8px;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 12px;">
-                            <div>
-                                <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">平均每次练习时长</div>
-                                <div style="font-size: 16px; font-weight: 700; color: #2d3748;">${totalTime}</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 13px; color: #718096; margin-bottom: 4px;">平均每次练习题数</div>
-                                <div style="font-size: 16px; font-weight: 700; color: #2d3748;">${avgQuestionsPerSession}题</div>
-                            </div>
-                        </div>
-                        <div style="font-size: 13px; color: #4a5568; line-height: 1.6;">
-                            ${studyData.overall.totalSessions > 0 ? 
-                                `基于${studyData.overall.totalSessions}次练习数据分析，你的学习效率${overallAccuracy >= 75 ? '较高' : '有待提高'}。` : 
-                                '练习数据不足，无法进行效率分析。'}
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <div style="font-size: 15px; font-weight: 600; color: #2d3748; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">💡 个性化建议</div>
-                    <div style="background: #ebf8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #4299e1;">
-                        <div style="font-size: 13px; color: #2c5282; line-height: 1.6;">
-                            ${generatePersonalizedAdvice()}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            container.innerHTML = reportHTML;
-        }
-        
-        function generatePersonalizedAdvice() {
-            const advice = [];
-            
-            // 基于连续学习天数的建议
-            if (studyData.overall.streakDays >= 7) {
-                advice.push("✅ 你已保持连续学习超过一周，学习习惯良好！");
-            } else if (studyData.overall.streakDays < 3) {
-                advice.push("📅 建议建立更稳定的学习节奏，连续学习效果更佳。");
-            }
-            
-            // 基于正确率的建议
-            const overallAccuracy = studyData.overall.totalQuestions > 0 ? 
-                (studyData.overall.totalCorrect / studyData.overall.totalQuestions * 100) : 0;
-            
-            if (overallAccuracy >= 80) {
-                advice.push("💎 整体正确率优秀，可以适当挑战更高难度的练习。");
-            } else if (overallAccuracy >= 70) {
-                advice.push("👍 正确率良好，建议在保持的基础上寻求突破。");
-            } else if (overallAccuracy >= 60) {
-                advice.push("📝 正确率有提升空间，建议加强错题分析和薄弱模块练习。");
-            } else {
-                advice.push("⚠️ 正确率偏低，建议放慢节奏，注重练习质量而非数量。");
-            }
-            
-            // 基于练习频率的建议
-            const today = new Date().toISOString().split('T')[0];
-            const todaySessions = studyData.daily.sessions.length;
-            
-            if (todaySessions === 0) {
-                advice.push("🎯 今天尚未开始学习，建议尽快完成至少1个模块的练习。");
-            } else if (todaySessions >= 3) {
-                advice.push("⚡ 今天练习量充足，注意适当休息，避免过度疲劳。");
-            }
-            
-            // 基于薄弱模块的建议
-            const weakModules = studyData.modules.filter(module => {
-                const stats = studyData.moduleStats[module.id];
-                if (!stats || stats.attempts === 0) return false;
-                const accuracy = (stats.totalCorrect / stats.totalQuestions) * 100;
-                return accuracy < 65;
-            });
-            
-            if (weakModules.length > 0) {
-                advice.push(`📉 发现${weakModules.length}个薄弱模块，建议制定专项突破计划。`);
-            }
-            
-            return advice.length > 0 ? advice.join('<br><br>') : "保持当前学习节奏，系统会持续为你提供个性化建议。";
         }
         
         // ============================================
-        // 页面加载
+        // 启动
         // ============================================
         
-        window.onload = init;
-        
-        // 全局事件监听（用于实时反馈更新）
-        document.addEventListener('input', function(e) {
-            if (e.target.id === 'questionsInput' || e.target.id === 'questionsSlider' || 
-                e.target.id === 'wrongInput' || e.target.id === 'wrongRange') {
-                updateRealTimeFeedback();
-            }
-        });
-        
-        // 模块详情函数（占位）
-        function showModuleDetails(index) {
-            alert("模块详情功能开发中...");
-        }
+        window.onload = function() {
+            init();
+            
+            // 导出全局函数
+            window.showModuleDetails = showModuleDetails;
+            window.startRecommended = startRecommended;
+            window.closeDetailModal = closeDetailModal;
+            window.startDetailModule = startDetailModule;
+            window.filterModules = filterModules;
+            window.completeModule = completeModule;
+            window.submitComplete = submitComplete;
+            window.closeCompleteModal = closeCompleteModal;
+            window.showEditModal = showEditModal;
+            window.closeEditModal = closeEditModal;
+            window.showAddModuleModal = showAddModuleModal;
+            window.closeAddModuleModal = closeAddModuleModal;
+            window.moveModule = moveModule;
+            window.removeModule = removeModule;
+            window.addModule = addModule;
+            window.saveModules = saveModules;
+            window.showResetModal = showResetModal;
+            window.closeResetModal = closeResetModal;
+            window.resetToday = resetToday;
+            window.showClearAllModal = showClearAllModal;
+            window.closeClearAllModal = closeClearAllModal;
+            window.clearAllData = clearAllData;
+            window.exportData = exportData;
+            window.showStatsModal = showStatsModal;
+            window.closeStatsModal = closeStatsModal;
+            window.updateRealTimeFeedback = updateRealTimeFeedback;
+        };
     </script>
 </body>
 </html>
